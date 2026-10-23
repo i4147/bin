@@ -15,6 +15,7 @@ Everything here is standalone: `python3` for the Python tools, bash for the rest
 | `inspect.sh` | quick look at a script (head/tail, defs, flags, imports, grep) |
 | `compare_cli.sh` | diff `--help` / bare-run behaviour between two directories |
 | `fetch_sources.sh` | fetch pristine `p*.py` from `i4147/bin_oct` into `orig/` + `out/` |
+| `test_stripper.py` | 15 tests for `../stripper.py` (runs without tree-sitter) |
 
 ## The similarity report
 
@@ -127,6 +128,49 @@ python3 arena/annotation_stats.py --json    # coverage as JSON
 `check_all.sh` skips `pysearch.py` and `py7zmax.py`, the two files excluded from
 the rewrite. Current state: 0 comment lines, 0 docstrings, 2,905/2,905 parameters
 annotated (87.3% concrete), 1,956/1,956 returns annotated, everything class-based.
+
+## Language comment strippers
+
+`../stripper.py` replaces the per-language strippers that now live in
+`../cleaners/`. It is class-based, fully annotated and comment-free, driven by one
+language table (`Language` + `LANGUAGES`), so adding a language is a single row.
+
+```console
+./stripper.py --js --rs --css src/           # explicit languages
+./stripper.py -a .                           # autodetect by extension under .
+./stripper.py -a . -n -b regex               # dry run with a unified diff
+./stripper.py --list-languages               # flag / extensions / markers / backend
+./stripper.py -a . -b tree-sitter -j 8      # force a backend, use the process pool
+```
+
+- **21 languages**: `--bash --c --cpp --css --dockerfile --go --html --java --js
+  --lua --make --php --rb --rs --sql --toml --ts --tsx --vim --xml --yaml`, plus
+  aliases (`--sh`, `--javascript`, `--rust`, `--ruby`, `--yml`, ...).
+- **`-a/--all`** walks the paths (default `.`), skipping `.git`, `.venv`,
+  `node_modules`, `__pycache__`, `dist`, `build`, hidden files and `*.bak`, then
+  picks a language per extension. Python is deliberately left alone.
+- **Backends**: `tree-sitter` when the grammar imports, otherwise a string-aware
+  `regex` scanner; `-b/--backend` forces either. Both drop comment-only lines,
+  trim inline comments without leaving trailing whitespace, and keep markers that
+  sit inside strings (`"http://x//y"`, `"""# not a comment"""`, `'# kept'`).
+- **Shared flags**: `-n/--dry-run`, `-d/--diff`, `--backup`, `-j/--workers`,
+  `-q/--quiet`, `--keep-blank-lines`.
+
+Consolidation was safe because the old scripts barely differed. Pointing the
+similarity tool at them shows it:
+
+```console
+python3 arena/script_similarity.py --root cleaners --pattern 'clean*.py' --top 8
+# clean-js.py  / clean-ts.py    0.809
+# clean-lua.py / clean-toml.py  0.668
+# clean-js.py  / clean-lua.py   0.668
+# clean-css.py / clean-js.py    0.643
+```
+
+Layout after the move: language strippers in `cleaners/` (16 files, each mapped to
+its `stripper.py` flag in `cleaners/README.md`), python strippers at the root
+(`cleanpy.py`, `clean_type_annotations.py`), `stripper.py` as the single entry
+point. Tests: `python3 arena/test_stripper.py` (15/15).
 
 ## Notes
 
