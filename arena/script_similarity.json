@@ -1,0 +1,5749 @@
+{
+  "schema_version": 1,
+  "generated": "2026-10-23",
+  "repository": "i4147/bin",
+  "commit": "8d270cc",
+  "source_of_scripts": "i4147/bin_oct@3d93c5d (copied in, then rewritten in place)",
+  "scope": {
+    "scripts_total": 101,
+    "scripts_in_groups": 86,
+    "scripts_standalone": 15,
+    "groups": 31,
+    "mergeable_groups": 28,
+    "files_removable_if_all_merges_land": 52,
+    "excluded_from_rewrite": [
+      "pysearch.py",
+      "py7zmax.py"
+    ]
+  },
+  "how_to_read": {
+    "kind": {
+      "near-duplicate": "measured score >= 0.5: same code with small differences",
+      "duplicate-lineage": "one script is an ancestor/sibling of another",
+      "variant-cluster": "same job, different technique or backend",
+      "toolkit-overlap": "subcommand/feature overlap; merge at the CLI level",
+      "category": "same domain, merging NOT recommended",
+      "shared-library": "cross-cutting code to extract, CLIs stay separate"
+    },
+    "verdict": {
+      "merge-target": "keep this file as the base of the merged tool",
+      "merge": "fold into the merge target, then delete",
+      "keep": "stays as-is"
+    },
+    "evidence": "scores come from arena/script_similarity.py; weights are in similarity_model",
+    "effort": {
+      "S": "under an hour",
+      "M": "half a day",
+      "L": "a day or more"
+    }
+  },
+  "similarity_model": {
+    "weights": {
+      "shingles": 0.3,
+      "tokens": 0.25,
+      "definitions": 0.2,
+      "imports": 0.15,
+      "flags": 0.1
+    },
+    "signals": {
+      "shingles": "3-gram Jaccard over the normalised token stream",
+      "tokens": "Jaccard over identifier names",
+      "definitions": "Jaccard over function/class names",
+      "imports": "Jaccard over imported modules",
+      "flags": "Jaccard over --cli options"
+    },
+    "caveat": "Scores rank candidates; they are not the grouping criterion. Scripts doing the same job with different libraries can score low (different identifiers) while unrelated small scripts score ~0.15 on shared stdlib imports.",
+    "recompute": "python3 arena/script_similarity.py --top 40"
+  },
+  "by_task": {
+    "pdf-text": "Extract text from PDFs: whole document, per page, or one .txt per page",
+    "pdf-viewer": "View PDF content in the terminal (extracted text or rendered pages)",
+    "pdf-toolkit": "Merge, split, outline, compress and convert PDF files",
+    "pdf-render": "Render PDF pages to PNG/JPG files",
+    "image-terminal": "Render image files as text/ANSI inside the terminal",
+    "python-source-cleanup": "Strip comments, docstrings, type hints; remove unused imports and definitions",
+    "package-merge": "Merge a multi-file Python package into one file",
+    "python-modernize": "Migrate or clean up legacy Python syntax",
+    "duplicate-detection": "Find duplicate files, duplicate definitions and near-duplicate code",
+    "pypi-download": "Fetch wheels and sdists for a package name, list file or user",
+    "pypi-search": "Find packages by name/description",
+    "pypi-stats": "Report download counts from pypistats.org",
+    "pypi-health": "Check whether installed packages import and are up to date",
+    "installed-inspection": "Audit site-packages: duplicates, versions, purity, deprecated APIs",
+    "pkg-maintenance": "Install, clean, copy, repack or zip installed packages",
+    "pip-ops": "Uninstall or reinstall installed packages",
+    "file-renamer": "Rename files with patterns, templates, case and unicode transforms",
+    "text-hygiene": "Detect or fix CRLF, BOM and missing trailing newlines",
+    "file-diff": "Compare files (text lines, bytecode) and act on the result",
+    "pickle-json": "Convert pickle files to JSON",
+    "notebook-convert": "Convert a .py script into an .ipynb notebook",
+    "formatting": "Format or minify web assets and code",
+    "optimizers": "Run an external optimiser (pngquant / svgo) over a file tree",
+    "bat-clone": "View files with syntax highlighting, line ranges and paging",
+    "path-tools": "Show and diagnose the PATH environment variable",
+    "file-search": "Search files by content or pick one interactively",
+    "scaffolding": "Create a new project skeleton (Python or Rust) and package metadata",
+    "ast-extraction": "Pull definitions or documentation out of Python files",
+    "web-docs": "Fetch, inline or validate web and Markdown assets",
+    "tui-shared": "Cross-cutting: raw-mode key handling, terminal sizing and ANSI rendering",
+    "linter-wrappers": "Cross-cutting: run a linter over a file set in parallel"
+  },
+  "recipes": [
+    {
+      "intent": "convert a pickle file to JSON",
+      "group": "pickle-json",
+      "use": [
+        "pklr.py"
+      ],
+      "also": [
+        "pkl2json.py",
+        "pkltojson.py"
+      ],
+      "group_title": "Pickle → JSON conversion"
+    },
+    {
+      "intent": "convert a Python script to a Jupyter notebook",
+      "group": "notebook-convert",
+      "use": [
+        "py2ipynb.py"
+      ],
+      "also": [
+        "pytoipynb.py"
+      ],
+      "group_title": "Python script → Jupyter notebook"
+    },
+    {
+      "intent": "convert line endings (CRLF <-> LF) or fix BOM/final newline",
+      "group": "text-hygiene",
+      "use": [
+        "pyfslint.py"
+      ],
+      "also": [
+        "pydos2unix.py",
+        "pydos2unix2.py"
+      ],
+      "group_title": "Text-file hygiene (line endings, BOM, final newline)"
+    },
+    {
+      "intent": "extract text from a PDF",
+      "group": "pdf-text",
+      "use": [
+        "pdftotext.py"
+      ],
+      "also": [
+        "pdf2text.py",
+        "pdf2page.py",
+        "perpage.py",
+        "ppage.py"
+      ],
+      "group_title": "PDF → text extraction"
+    },
+    {
+      "intent": "render PDF pages to PNG/JPG",
+      "group": "pdf-render",
+      "use": [
+        "pdf2img.py"
+      ],
+      "also": [
+        "pdf2png.py"
+      ],
+      "group_title": "PDF → raster images"
+    },
+    {
+      "intent": "merge, split or compress PDFs",
+      "group": "pdf-toolkit",
+      "use": [
+        "pdftoolz.py"
+      ],
+      "also": [
+        "pdftools2.py",
+        "pdftools.py"
+      ],
+      "group_title": "PDF manipulation toolkits"
+    },
+    {
+      "intent": "read a PDF in the terminal",
+      "group": "pdf-viewer",
+      "use": [
+        "pdfview.py"
+      ],
+      "also": [
+        "pdfv.py",
+        "pdfv2.py",
+        "pdfviewer.py"
+      ],
+      "group_title": "Terminal PDF viewers"
+    },
+    {
+      "intent": "display an image in the terminal",
+      "group": "image-terminal",
+      "use": [
+        "pycatimg.py"
+      ],
+      "also": [
+        "pychafa.py",
+        "pyrgb.py"
+      ],
+      "group_title": "Images in the terminal"
+    },
+    {
+      "intent": "find duplicate or near-duplicate Python code",
+      "group": "duplicate-detection",
+      "use": [
+        "pydup.py"
+      ],
+      "also": [
+        "python_duplicate_finder.py",
+        "pydeduper.py",
+        "pysim.py"
+      ],
+      "group_title": "Duplicate / similarity detection for Python code"
+    },
+    {
+      "intent": "download packages or wheels from PyPI or a mirror",
+      "group": "pypi-download",
+      "use": [
+        "pypidl.py"
+      ],
+      "also": [
+        "pyget.py",
+        "pipget.py",
+        "python_downloader.py",
+        "pip_downloader.py",
+        "pypi_user_pkgs.py"
+      ],
+      "group_title": "Download packages from PyPI / mirrors"
+    },
+    {
+      "intent": "search for a package by name/description",
+      "group": "pypi-search",
+      "use": [
+        "psearch.py"
+      ],
+      "also": [
+        "pss.py"
+      ],
+      "group_title": "Search PyPI packages"
+    },
+    {
+      "intent": "get download statistics for a package",
+      "group": "pypi-stats",
+      "use": [
+        "pypi_stats.py"
+      ],
+      "also": [
+        "pypistats.py"
+      ],
+      "group_title": "PyPI download statistics"
+    },
+    {
+      "intent": "check installed packages for updates / import errors",
+      "group": "pypi-health",
+      "use": [
+        "pypi_update_check.py"
+      ],
+      "also": [
+        "pysanity-check.py",
+        "pip_sanity_check.py"
+      ],
+      "group_title": "Installed-package health checks"
+    },
+    {
+      "intent": "audit site-packages (duplicates, versions, purity)",
+      "group": "installed-inspection",
+      "use": [
+        "pkg_insoector.py"
+      ],
+      "also": [
+        "purepy.py",
+        "pkgres.py"
+      ],
+      "group_title": "Inspect installed distributions"
+    },
+    {
+      "intent": "install, copy, repack or clean installed packages",
+      "group": "pkg-maintenance",
+      "use": [
+        "pkg_tools.py"
+      ],
+      "also": [
+        "pkgtools2.py",
+        "pkgtools.py",
+        "pyzpkg.py",
+        "pyco.py"
+      ],
+      "group_title": "Package / site-packages maintenance"
+    },
+    {
+      "intent": "uninstall or reinstall installed packages",
+      "group": "pip-ops",
+      "use": [
+        "piu.py"
+      ],
+      "also": [
+        "pip_reinstaller.py"
+      ],
+      "group_title": "pip install/uninstall operations"
+    },
+    {
+      "intent": "strip comments, docstrings or unused imports",
+      "group": "python-source-cleanup",
+      "use": [
+        "pyclean.py"
+      ],
+      "also": [
+        "py_clean.py",
+        "pycleaner.py"
+      ],
+      "group_title": "Python source stripping / cleanup"
+    },
+    {
+      "intent": "merge a multi-module package into one file",
+      "group": "package-merge",
+      "use": [
+        "py_refactor.py"
+      ],
+      "also": [
+        "prefactor.py",
+        "py_refact.py"
+      ],
+      "group_title": "Collapse a package into a single module"
+    },
+    {
+      "intent": "modernise Python 2 / legacy syntax",
+      "group": "python-modernize",
+      "use": [
+        "py3migrate.py"
+      ],
+      "also": [
+        "pyenhance.py",
+        "py_refact.py"
+      ],
+      "group_title": "Python 2 → 3 / source modernisation"
+    },
+    {
+      "intent": "rename files with patterns, templates or case changes",
+      "group": "file-renamer",
+      "use": [
+        "pnr2.py"
+      ],
+      "also": [
+        "pnr.py"
+      ],
+      "group_title": "File / directory renamers"
+    },
+    {
+      "intent": "diff two files (lines or bytecode)",
+      "group": "file-diff",
+      "use": [
+        "pydiff.py"
+      ],
+      "also": [
+        "pdiff.py",
+        "pdif.py"
+      ],
+      "group_title": "File comparison / diffing"
+    },
+    {
+      "intent": "format or minify HTML/CSS/JS/JSON",
+      "group": "formatting",
+      "use": [
+        "pyfmt.py"
+      ],
+      "also": [
+        "pret2.py",
+        "pret.py",
+        "pyterser.py"
+      ],
+      "group_title": "Formatting and minification"
+    },
+    {
+      "intent": "optimise PNG or SVG assets",
+      "group": "optimizers",
+      "use": [
+        "pngq.py"
+      ],
+      "also": [
+        "pysvg.py"
+      ],
+      "group_title": "Asset optimiser wrappers"
+    },
+    {
+      "intent": "search files by content",
+      "group": "file-search",
+      "use": [
+        "pyrg.py"
+      ],
+      "also": [
+        "pfzf.py",
+        "pysearch.py"
+      ],
+      "group_title": "Recursive file / content search"
+    },
+    {
+      "intent": "inspect or fix PATH problems",
+      "group": "path-tools",
+      "use": [
+        "pathdiag.py"
+      ],
+      "also": [
+        "pathcmd.py"
+      ],
+      "group_title": "PATH inspection"
+    },
+    {
+      "intent": "scaffold a new project (pyproject, package, GitHub repo)",
+      "group": "scaffolding",
+      "use": [
+        "pyproj.py"
+      ],
+      "also": [
+        "pydevtools.py"
+      ],
+      "group_title": "Project scaffolding"
+    },
+    {
+      "intent": "extract definitions or docstrings from Python sources",
+      "group": "ast-extraction",
+      "use": [
+        "pyextract.py"
+      ],
+      "also": [
+        "pydocr.py"
+      ],
+      "group_title": "Python source extraction"
+    },
+    {
+      "intent": "view a file with syntax highlighting",
+      "group": "bat-clone",
+      "use": [
+        "pbat.py"
+      ],
+      "also": [
+        "pybat.py"
+      ],
+      "group_title": "bat-style file viewer"
+    },
+    {
+      "intent": "count lines of code by language",
+      "group": null,
+      "use": [
+        "pytokei.py"
+      ],
+      "also": [],
+      "group_title": null
+    },
+    {
+      "intent": "run every script in a directory and summarise results",
+      "group": null,
+      "use": [
+        "pyrun.py"
+      ],
+      "also": [],
+      "group_title": null
+    },
+    {
+      "intent": "OCR an image",
+      "group": null,
+      "use": [
+        "pyocr.py"
+      ],
+      "also": [],
+      "group_title": null
+    },
+    {
+      "intent": "extract subtitles from a video",
+      "group": null,
+      "use": [
+        "pyxsrt.py"
+      ],
+      "also": [],
+      "group_title": null
+    },
+    {
+      "intent": "calculate expressions / convert units",
+      "group": null,
+      "use": [
+        "pyqalc.py"
+      ],
+      "also": [],
+      "group_title": null
+    },
+    {
+      "intent": "print a Jalali calendar or convert dates",
+      "group": null,
+      "use": [
+        "pyjcal.py"
+      ],
+      "also": [],
+      "group_title": null
+    },
+    {
+      "intent": "shuffle lines of a file",
+      "group": null,
+      "use": [
+        "pyshuf.py"
+      ],
+      "also": [],
+      "group_title": null
+    },
+    {
+      "intent": "split a text file into N parts",
+      "group": null,
+      "use": [
+        "pysplit.py"
+      ],
+      "also": [],
+      "group_title": null
+    },
+    {
+      "intent": "plot a function",
+      "group": null,
+      "use": [
+        "plotter.py"
+      ],
+      "also": [],
+      "group_title": null
+    },
+    {
+      "intent": "inline a webpage into a single HTML file",
+      "group": "web-docs",
+      "use": [
+        "pymonolith.py"
+      ],
+      "also": [
+        "pylychee.py"
+      ],
+      "group_title": "Web / Markdown asset handling"
+    },
+    {
+      "intent": "download URLs from a list",
+      "group": null,
+      "use": [
+        "pycurl_downloader.py"
+      ],
+      "also": [
+        "pypidl.py"
+      ],
+      "group_title": null
+    },
+    {
+      "intent": "syntax-check C/C++ files",
+      "group": "linter-wrappers",
+      "use": [
+        "pycppcheck.py"
+      ],
+      "also": [
+        "pyruf.py"
+      ],
+      "group_title": "External linter wrappers"
+    }
+  ],
+  "groups": [
+    {
+      "id": "pdf-text",
+      "title": "PDF → text extraction",
+      "task": "Extract text from PDFs: whole document, per page, or one .txt per page",
+      "kind": "variant-cluster",
+      "confidence": "high",
+      "scripts": [
+        {
+          "path": "pdftotext.py",
+          "role": "backend-fallback extractor",
+          "verdict": "merge-target",
+          "backends": [
+            "fitz",
+            "pdfminer",
+            "pdfplumber",
+            "pypdf"
+          ],
+          "purpose": "Extract text from PDFs with backend fallback (fitz / pdfminer / pdfplumber / pypdf)."
+        },
+        {
+          "path": "pdf2page.py",
+          "role": "per-page .txt writer, five optional backends",
+          "verdict": "merge",
+          "backends": [
+            "PyPDF2",
+            "fitz",
+            "pdfminer",
+            "pdfplumber",
+            "pypdf"
+          ],
+          "purpose": "Extract every PDF page to its own .txt with the first of five available backends."
+        },
+        {
+          "path": "pdf2text.py",
+          "role": "concat/split text extractor",
+          "verdict": "merge",
+          "backends": [
+            "PyPDF2",
+            "pdfplumber"
+          ],
+          "purpose": "Extract PDF text, concatenated or split per page (PyPDF2 / pdfplumber)."
+        },
+        {
+          "path": "perpage.py",
+          "role": "parallel per-page split + text extraction",
+          "verdict": "merge",
+          "backends": [
+            "pypdf",
+            "loguru"
+          ],
+          "purpose": "Split PDFs into single pages and extract text per page in a process pool."
+        },
+        {
+          "path": "ppage.py",
+          "role": "older, serial ancestor of perpage.py",
+          "verdict": "merge",
+          "purpose": "Early per-page PDF splitter + text extractor (ancestor of perpage.py)."
+        }
+      ],
+      "why": "All five read the same input and emit text; three of them write one .txt per page. Backend choice is baked in as an import fallback chain, which is exactly the axis a -b/--backend flag should control.",
+      "merge": {
+        "suggested_name": "pdftotext",
+        "strategy": "One CLI; backend and output layout become flags, parallelism comes from perpage.py.",
+        "cli_example": "pdftotext -b pdfplumber --mode per-page -j 8 -o out/ report.pdf",
+        "flags": [
+          {
+            "flag": "-b, --backend",
+            "values": [
+              "pymupdf",
+              "pypdf",
+              "pdfplumber",
+              "pdfminer"
+            ],
+            "replaces": "hard-coded import fallback order in each script"
+          },
+          {
+            "flag": "--mode",
+            "values": [
+              "concat",
+              "per-page",
+              "split"
+            ],
+            "replaces": "pdf2text run_concat/run_split, pdf2page, perpage split_pdf_by_page"
+          },
+          {
+            "flag": "-j, --jobs",
+            "replaces": "perpage.py process pool"
+          },
+          {
+            "flag": "-o, --output-dir",
+            "replaces": "per-page output naming in three scripts"
+          },
+          {
+            "flag": "--pages",
+            "replaces": "ad-hoc page selection in pdf2page.py"
+          }
+        ],
+        "remove_files": [
+          "pdf2text.py",
+          "pdf2page.py",
+          "ppage.py"
+        ],
+        "effort": "M",
+        "risks": [
+          "per-backend quirks (encrypted PDFs, layout mode) differ; keep per-backend tests"
+        ],
+        "payoff": "5 files → 1, one place to fix extraction bugs"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "perpage.py",
+          "right": "ppage.py",
+          "shingles": 0.0295,
+          "tokens": 0.291,
+          "definitions": 0.25,
+          "imports": 0.2727,
+          "flags": 0.2,
+          "score": 0.1925
+        },
+        "pairs": [
+          {
+            "left": "perpage.py",
+            "right": "ppage.py",
+            "shingles": 0.0295,
+            "tokens": 0.291,
+            "definitions": 0.25,
+            "imports": 0.2727,
+            "flags": 0.2,
+            "score": 0.1925
+          },
+          {
+            "left": "pdf2page.py",
+            "right": "pdf2text.py",
+            "shingles": 0.0142,
+            "tokens": 0.2327,
+            "definitions": 0.0769,
+            "imports": 0.6364,
+            "flags": 0.0857,
+            "score": 0.1819
+          },
+          {
+            "left": "pdf2page.py",
+            "right": "pdftotext.py",
+            "shingles": 0.0036,
+            "tokens": 0.1826,
+            "definitions": 0.05,
+            "imports": 0.6154,
+            "flags": 0.1379,
+            "score": 0.1628
+          },
+          {
+            "left": "pdf2text.py",
+            "right": "perpage.py",
+            "shingles": 0.0106,
+            "tokens": 0.2256,
+            "definitions": 0.0455,
+            "imports": 0.3636,
+            "flags": 0.1538,
+            "score": 0.1386
+          },
+          {
+            "left": "pdf2text.py",
+            "right": "pdftotext.py",
+            "shingles": 0.0099,
+            "tokens": 0.1879,
+            "definitions": 0.1176,
+            "imports": 0.4167,
+            "flags": 0.0,
+            "score": 0.136
+          },
+          {
+            "left": "pdf2page.py",
+            "right": "perpage.py",
+            "shingles": 0.0047,
+            "tokens": 0.2148,
+            "definitions": 0.0417,
+            "imports": 0.3571,
+            "flags": 0.0645,
+            "score": 0.1235
+          }
+        ],
+        "interpretation": "best measured pair 0.19: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "pdf-viewer",
+      "title": "Terminal PDF viewers",
+      "task": "View PDF content in the terminal (extracted text or rendered pages)",
+      "kind": "variant-cluster",
+      "confidence": "high",
+      "scripts": [
+        {
+          "path": "pdfview.py",
+          "role": "text pager with backend autodetection",
+          "verdict": "merge-target",
+          "backends": [
+            "fitz",
+            "pdfminer",
+            "pypdf"
+          ],
+          "purpose": "Scrollable terminal pager for PDF text with backend autodetection."
+        },
+        {
+          "path": "pdfv.py",
+          "role": "PyMuPDF text viewer with goto/scroll",
+          "verdict": "merge",
+          "backends": [
+            "pymupdf",
+            "readchar"
+          ],
+          "purpose": "Terminal text viewer for PDFs (PyMuPDF extraction, scroll, goto page)."
+        },
+        {
+          "path": "pdfv2.py",
+          "role": "image viewer rendering PPM pages",
+          "verdict": "merge",
+          "backends": [
+            "ghostscript"
+          ],
+          "purpose": "Terminal PDF viewer that renders pages as images (PPM)."
+        },
+        {
+          "path": "pdfviewer.py",
+          "role": "image viewer with zoom",
+          "verdict": "merge",
+          "backends": [
+            "fitz"
+          ],
+          "purpose": "Terminal PDF viewer that renders pages at a zoom level."
+        }
+      ],
+      "why": "Two rendering strategies (extract text vs rasterise pages) have each been implemented twice, and all four share terminal sizing and key handling.",
+      "merge": {
+        "suggested_name": "pdfview",
+        "strategy": "Single viewer; text vs image is a mode, the rasteriser is a backend.",
+        "cli_example": "pdfview --mode image -b fitz --zoom 1.5 report.pdf",
+        "flags": [
+          {
+            "flag": "--mode",
+            "values": [
+              "text",
+              "image"
+            ],
+            "replaces": "pdfview/pdfv (text) vs pdfv2/pdfviewer (image)"
+          },
+          {
+            "flag": "-b, --backend",
+            "values": [
+              "fitz",
+              "pdfminer",
+              "pypdf",
+              "ghostscript"
+            ],
+            "replaces": "per-script extraction and rasterisation choices"
+          },
+          {
+            "flag": "--zoom",
+            "replaces": "pdfviewer.py set_zoom"
+          },
+          {
+            "flag": "--keys",
+            "values": [
+              "vi",
+              "arrows"
+            ],
+            "replaces": "three copies of key decoding"
+          }
+        ],
+        "remove_files": [
+          "pdfv.py",
+          "pdfv2.py",
+          "pdfviewer.py"
+        ],
+        "effort": "M",
+        "risks": [
+          "image mode needs a rasteriser dependency; keep ghostscript optional"
+        ],
+        "payoff": "4 files → 1, shared key handling; measured twin pdfv2/pdfviewer 0.48"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pdfv2.py",
+          "right": "pdfviewer.py",
+          "shingles": 0.3405,
+          "tokens": 0.5811,
+          "definitions": 0.5862,
+          "imports": 0.5333,
+          "flags": 0.3333,
+          "score": 0.478
+        },
+        "pairs": [
+          {
+            "left": "pdfv2.py",
+            "right": "pdfviewer.py",
+            "shingles": 0.3405,
+            "tokens": 0.5811,
+            "definitions": 0.5862,
+            "imports": 0.5333,
+            "flags": 0.3333,
+            "score": 0.478
+          },
+          {
+            "left": "pdfv.py",
+            "right": "pdfviewer.py",
+            "shingles": 0.138,
+            "tokens": 0.4912,
+            "definitions": 0.3571,
+            "imports": 0.6923,
+            "flags": 0.5,
+            "score": 0.3895
+          },
+          {
+            "left": "pdfv.py",
+            "right": "pdfv2.py",
+            "shingles": 0.1396,
+            "tokens": 0.3864,
+            "definitions": 0.3714,
+            "imports": 0.6429,
+            "flags": 0.1667,
+            "score": 0.3259
+          },
+          {
+            "left": "pdfv2.py",
+            "right": "pdfview.py",
+            "shingles": 0.0049,
+            "tokens": 0.1963,
+            "definitions": 0.0508,
+            "imports": 0.4091,
+            "flags": 0.0,
+            "score": 0.1221
+          },
+          {
+            "left": "pdfview.py",
+            "right": "pdfviewer.py",
+            "shingles": 0.0043,
+            "tokens": 0.1689,
+            "definitions": 0.0612,
+            "imports": 0.3636,
+            "flags": 0.0,
+            "score": 0.1103
+          },
+          {
+            "left": "pdfv.py",
+            "right": "pdfview.py",
+            "shingles": 0.0073,
+            "tokens": 0.1994,
+            "definitions": 0.0385,
+            "imports": 0.3043,
+            "flags": 0.0,
+            "score": 0.1054
+          }
+        ],
+        "interpretation": "best measured pair 0.48: structurally close, merge is mostly deletion"
+      }
+    },
+    {
+      "id": "pdf-toolkit",
+      "title": "PDF manipulation toolkits",
+      "task": "Merge, split, outline, compress and convert PDF files",
+      "kind": "variant-cluster",
+      "confidence": "high",
+      "scripts": [
+        {
+          "path": "pdftools2.py",
+          "role": "toolkit with pdf2image/pypdf/pdfplumber backends",
+          "verdict": "merge-target",
+          "backends": [
+            "pdf2image",
+            "pypdf",
+            "pdfplumber",
+            "lxml"
+          ],
+          "purpose": "Unified PDF toolkit: outline, merge, to-image, rename pages, shrink, split by size."
+        },
+        {
+          "path": "pdftoolz.py",
+          "role": "PyMuPDF-only toolkit with the same subcommands",
+          "verdict": "merge",
+          "backends": [
+            "pymupdf"
+          ],
+          "purpose": "Unified PDF toolkit, PyMuPDF-only sibling of pdftools2.py."
+        },
+        {
+          "path": "pdftools.py",
+          "role": "PyMuPDF text/split/merge/attachment extras",
+          "verdict": "merge",
+          "backends": [
+            "pymupdf"
+          ],
+          "purpose": "PDF utility suite on PyMuPDF: text, per-page split, merge, image/font/attachment extraction."
+        }
+      ],
+      "why": "pdftools2.py and pdftoolz.py expose the same subcommands (outline, merge, to-img, rename-pages, shrink, split-size) with different libraries — the textbook backend split. pdftools.py adds extraction subcommands that belong in the same CLI.",
+      "merge": {
+        "suggested_name": "pdftools",
+        "strategy": "Subcommand CLI; library selection is a backend flag plus optional dependency guards.",
+        "cli_example": "pdftools -b pymupdf merge --out book.pdf a.pdf b.pdf",
+        "flags": [
+          {
+            "flag": "-b, --backend",
+            "values": [
+              "pymupdf",
+              "pypdf",
+              "pdf2image",
+              "ghostscript"
+            ],
+            "replaces": "pdftoolz vs pdftools2 dependency choice"
+          },
+          {
+            "flag": "subcommands",
+            "values": [
+              "merge",
+              "split",
+              "split-size",
+              "outline",
+              "to-img",
+              "rename-pages",
+              "shrink",
+              "extract",
+              "info"
+            ],
+            "replaces": "the union of cmd_* methods in the three scripts"
+          }
+        ],
+        "remove_files": [
+          "pdftools2.py",
+          "pdftoolz.py",
+          "pdftools.py"
+        ],
+        "effort": "L",
+        "risks": [
+          "largest surface area of any group; migrate one subcommand per commit"
+        ],
+        "payoff": "3 toolkits → 1; measured twin pdftools2/pdftoolz 0.66"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pdftools2.py",
+          "right": "pdftoolz.py",
+          "shingles": 0.4802,
+          "tokens": 0.7635,
+          "definitions": 0.6667,
+          "imports": 0.6111,
+          "flags": 0.9512,
+          "score": 0.6551
+        },
+        "pairs": [
+          {
+            "left": "pdftools2.py",
+            "right": "pdftoolz.py",
+            "shingles": 0.4802,
+            "tokens": 0.7635,
+            "definitions": 0.6667,
+            "imports": 0.6111,
+            "flags": 0.9512,
+            "score": 0.6551
+          },
+          {
+            "left": "pdftools.py",
+            "right": "pdftoolz.py",
+            "shingles": 0.0049,
+            "tokens": 0.1744,
+            "definitions": 0.0172,
+            "imports": 0.5333,
+            "flags": 0.0196,
+            "score": 0.1305
+          },
+          {
+            "left": "pdftools.py",
+            "right": "pdftools2.py",
+            "shingles": 0.0059,
+            "tokens": 0.1614,
+            "definitions": 0.0196,
+            "imports": 0.3684,
+            "flags": 0.0189,
+            "score": 0.1032
+          }
+        ],
+        "interpretation": "best measured pair 0.66: structurally close, merge is mostly deletion"
+      }
+    },
+    {
+      "id": "pdf-render",
+      "title": "PDF → raster images",
+      "task": "Render PDF pages to PNG/JPG files",
+      "kind": "near-duplicate",
+      "confidence": "high",
+      "scripts": [
+        {
+          "path": "pdf2img.py",
+          "role": "PyMuPDF rasteriser",
+          "verdict": "merge-target",
+          "backends": [
+            "pymupdf"
+          ],
+          "purpose": "Render PDF pages to JPG with PyMuPDF."
+        },
+        {
+          "path": "pdf2png.py",
+          "role": "pdftoppm rasteriser",
+          "verdict": "merge",
+          "backends": [
+            "poppler"
+          ],
+          "purpose": "Render PDF pages to PNG via pdftoppm."
+        }
+      ],
+      "why": "Same job, two renderers; output only differs in format and naming.",
+      "merge": {
+        "suggested_name": "pdf2img",
+        "strategy": "Keep one script, expose format and renderer.",
+        "cli_example": "pdf2img -b pdftoppm -f png --dpi 300 report.pdf",
+        "flags": [
+          {
+            "flag": "-b, --backend",
+            "values": [
+              "pymupdf",
+              "pdftoppm"
+            ],
+            "replaces": "two scripts"
+          },
+          {
+            "flag": "-f, --format",
+            "values": [
+              "png",
+              "jpg"
+            ],
+            "replaces": "hard-coded format"
+          },
+          {
+            "flag": "--dpi",
+            "replaces": "pdf2png dpi argument"
+          },
+          {
+            "flag": "-o, --output-dir",
+            "replaces": "output dir handling in both"
+          }
+        ],
+        "remove_files": [
+          "pdf2png.py"
+        ],
+        "effort": "S",
+        "risks": [
+          "pdftoppm is an external binary; guard with shutil.which"
+        ],
+        "payoff": "2 files → 1, format no longer decides which script to call"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pdf2img.py",
+          "right": "pdf2png.py",
+          "shingles": 0.0086,
+          "tokens": 0.0806,
+          "definitions": 0.1667,
+          "imports": 0.25,
+          "flags": 0.0,
+          "score": 0.0936
+        },
+        "pairs": [
+          {
+            "left": "pdf2img.py",
+            "right": "pdf2png.py",
+            "shingles": 0.0086,
+            "tokens": 0.0806,
+            "definitions": 0.1667,
+            "imports": 0.25,
+            "flags": 0.0,
+            "score": 0.0936
+          }
+        ],
+        "interpretation": "best measured pair 0.09: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "image-terminal",
+      "title": "Images in the terminal",
+      "task": "Render image files as text/ANSI inside the terminal",
+      "kind": "variant-cluster",
+      "confidence": "high",
+      "scripts": [
+        {
+          "path": "pycatimg.py",
+          "role": "true-colour renderer with SVG support",
+          "verdict": "merge-target",
+          "backends": [
+            "PIL",
+            "cairosvg"
+          ],
+          "purpose": "Display images, including SVG, in the terminal in true colour."
+        },
+        {
+          "path": "pychafa.py",
+          "role": "block-character renderer",
+          "verdict": "merge",
+          "backends": [
+            "PIL"
+          ],
+          "purpose": "Display an image in the terminal with block characters."
+        },
+        {
+          "path": "pyrgb.py",
+          "role": "colour-chart viewer, keep as demo mode",
+          "verdict": "keep",
+          "purpose": "Interactive RGB colour chart for the terminal."
+        }
+      ],
+      "why": "pycatimg.py and pychafa.py both open an image with PIL, fit it to the terminal and emit ANSI cells; they differ only in the cell renderer.",
+      "merge": {
+        "suggested_name": "pycatimg",
+        "strategy": "One renderer with a cell-style flag; pyrgb becomes a --demo colour chart.",
+        "cli_example": "pycatimg -s blocks logo.png ; pycatimg --demo",
+        "flags": [
+          {
+            "flag": "-s, --style",
+            "values": [
+              "truecolor",
+              "blocks",
+              "halfblocks"
+            ],
+            "replaces": "pycatimg vs pychafa pixel-to-cell code"
+          },
+          {
+            "flag": "--svg",
+            "replaces": "cairosvg fallback in pycatimg"
+          },
+          {
+            "flag": "--width / --height / --fit",
+            "replaces": "per-script terminal sizing"
+          },
+          {
+            "flag": "--demo",
+            "replaces": "pyrgb.py colour chart entry point"
+          }
+        ],
+        "remove_files": [
+          "pychafa.py"
+        ],
+        "effort": "S",
+        "risks": [
+          "true-colour support varies by terminal; auto-detect and fall back to blocks"
+        ],
+        "payoff": "2 files → 1 (plus pyrgb as a mode)"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pycatimg.py",
+          "right": "pyrgb.py",
+          "shingles": 0.0096,
+          "tokens": 0.1204,
+          "definitions": 0.0952,
+          "imports": 0.3636,
+          "flags": 0.0,
+          "score": 0.1066
+        },
+        "pairs": [
+          {
+            "left": "pycatimg.py",
+            "right": "pyrgb.py",
+            "shingles": 0.0096,
+            "tokens": 0.1204,
+            "definitions": 0.0952,
+            "imports": 0.3636,
+            "flags": 0.0,
+            "score": 0.1066
+          },
+          {
+            "left": "pycatimg.py",
+            "right": "pychafa.py",
+            "shingles": 0.0201,
+            "tokens": 0.2209,
+            "definitions": 0.0,
+            "imports": 0.3,
+            "flags": 0.0,
+            "score": 0.1063
+          },
+          {
+            "left": "pychafa.py",
+            "right": "pyrgb.py",
+            "shingles": 0.0041,
+            "tokens": 0.0833,
+            "definitions": 0.0667,
+            "imports": 0.2,
+            "flags": 0.0,
+            "score": 0.0654
+          }
+        ],
+        "interpretation": "best measured pair 0.11: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "python-source-cleanup",
+      "title": "Python source stripping / cleanup",
+      "task": "Strip comments, docstrings, type hints; remove unused imports and definitions",
+      "kind": "variant-cluster",
+      "confidence": "high",
+      "scripts": [
+        {
+          "path": "pyclean.py",
+          "role": "unified cleaner with AST/libcst/tokenize engines",
+          "verdict": "merge-target",
+          "backends": [
+            "libcst"
+          ],
+          "purpose": "Unified source cleaner: strip docstrings/comments (AST, libcst, tokenize) and check."
+        },
+        {
+          "path": "py_clean.py",
+          "role": "LibCST stripper with config, workers, gitignore, diff",
+          "verdict": "merge",
+          "backends": [
+            "libcst"
+          ],
+          "purpose": "Strip comments, docstrings and type hints with LibCST; parallel, gitignore-aware."
+        },
+        {
+          "path": "pycleaner.py",
+          "role": "unused-import and unused-definition reporter/autofixer",
+          "verdict": "merge",
+          "purpose": "Report and autofix unused imports and unused definitions."
+        }
+      ],
+      "why": "pyclean.py and py_clean.py strip the same three things and both grew a libcst engine; pycleaner.py is the inverse operation on the same AST, which fits as a subcommand.",
+      "merge": {
+        "suggested_name": "pyclean",
+        "strategy": "One tool: transform subcommands plus engine selection; keep py_clean config flags.",
+        "cli_example": "pyclean strip -e libcst --docstrings --comments -j 8 src/ ; pyclean unused --autofix src/",
+        "flags": [
+          {
+            "flag": "subcommands",
+            "values": [
+              "strip",
+              "check",
+              "diff",
+              "unused"
+            ],
+            "replaces": "py_clean.py modes + pycleaner.py p_imp/p_def subcommands"
+          },
+          {
+            "flag": "-e, --engine",
+            "values": [
+              "libcst",
+              "ast",
+              "tokenize"
+            ],
+            "replaces": "three stripping implementations"
+          },
+          {
+            "flag": "--docstrings / --comments / --type-hints",
+            "replaces": "py_clean.py flag set"
+          },
+          {
+            "flag": "-j, --jobs / --workers",
+            "replaces": "duplicated worker pools"
+          }
+        ],
+        "remove_files": [
+          "py_clean.py",
+          "pycleaner.py"
+        ],
+        "effort": "M",
+        "risks": [
+          "libcst is optional in pyclean.py; keep the AST path dependency-free"
+        ],
+        "payoff": "3 → 1; strip and unused-detection finally share one parser"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "py_clean.py",
+          "right": "pycleaner.py",
+          "shingles": 0.0056,
+          "tokens": 0.1864,
+          "definitions": 0.0465,
+          "imports": 0.52,
+          "flags": 0.1395,
+          "score": 0.1495
+        },
+        "pairs": [
+          {
+            "left": "py_clean.py",
+            "right": "pycleaner.py",
+            "shingles": 0.0056,
+            "tokens": 0.1864,
+            "definitions": 0.0465,
+            "imports": 0.52,
+            "flags": 0.1395,
+            "score": 0.1495
+          },
+          {
+            "left": "pyclean.py",
+            "right": "pycleaner.py",
+            "shingles": 0.0129,
+            "tokens": 0.2173,
+            "definitions": 0.0476,
+            "imports": 0.3636,
+            "flags": 0.05,
+            "score": 0.1272
+          },
+          {
+            "left": "py_clean.py",
+            "right": "pyclean.py",
+            "shingles": 0.0089,
+            "tokens": 0.1971,
+            "definitions": 0.0619,
+            "imports": 0.3636,
+            "flags": 0.0333,
+            "score": 0.1222
+          }
+        ],
+        "interpretation": "best measured pair 0.15: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "package-merge",
+      "title": "Collapse a package into a single module",
+      "task": "Merge a multi-file Python package into one file",
+      "kind": "variant-cluster",
+      "confidence": "high",
+      "scripts": [
+        {
+          "path": "py_refactor.py",
+          "role": "merge with __all__ building and backups",
+          "verdict": "merge-target",
+          "backends": [
+            "libcst"
+          ],
+          "purpose": "Refactor a small package: merge modules, build __all__, keep backups."
+        },
+        {
+          "path": "prefactor.py",
+          "role": "merge with import resolution and topological ordering",
+          "verdict": "merge",
+          "purpose": "Merge a multi-module package into a single-file module."
+        },
+        {
+          "path": "py_refact.py",
+          "role": "merge + py2/six/os.path/logging modernisation passes",
+          "verdict": "merge",
+          "purpose": "Merge a package into one modernised module (six/py2, os.path, logging rewrites)."
+        }
+      ],
+      "why": "Three implementations of the same pipeline: discover → order → rewrite imports → emit.",
+      "merge": {
+        "suggested_name": "pyrefactor",
+        "strategy": "One pipeline; output layout and optional rewrites are flags.",
+        "cli_example": "pyrefactor --layout single --modernize --backup pkg/",
+        "flags": [
+          {
+            "flag": "--layout",
+            "values": [
+              "single",
+              "top-level",
+              "subpkg"
+            ],
+            "replaces": "py_refactor build_merged_module / build_top_level_modules / build_subpkg_modules"
+          },
+          {
+            "flag": "--modernize",
+            "replaces": "py_refact strip_six_and_py2 / rewrite_os_path / rewrite_logging"
+          },
+          {
+            "flag": "--all-list / --no-all",
+            "replaces": "py_refactor make_all_list"
+          },
+          {
+            "flag": "--backup / --restore",
+            "replaces": "py_refactor ensure/restore_backups"
+          }
+        ],
+        "remove_files": [
+          "prefactor.py",
+          "py_refact.py"
+        ],
+        "effort": "L",
+        "risks": [
+          "import rewriting is where bugs hide; diff every generated module against the manual merge"
+        ],
+        "payoff": "3 → 1; the modernisation passes stop being tied to one merger"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "prefactor.py",
+          "right": "py_refactor.py",
+          "shingles": 0.0061,
+          "tokens": 0.1749,
+          "definitions": 0.0513,
+          "imports": 0.5714,
+          "flags": 0.0,
+          "score": 0.1415
+        },
+        "pairs": [
+          {
+            "left": "prefactor.py",
+            "right": "py_refactor.py",
+            "shingles": 0.0061,
+            "tokens": 0.1749,
+            "definitions": 0.0513,
+            "imports": 0.5714,
+            "flags": 0.0,
+            "score": 0.1415
+          },
+          {
+            "left": "prefactor.py",
+            "right": "py_refact.py",
+            "shingles": 0.0072,
+            "tokens": 0.1789,
+            "definitions": 0.0294,
+            "imports": 0.5455,
+            "flags": 0.0,
+            "score": 0.1346
+          },
+          {
+            "left": "py_refact.py",
+            "right": "py_refactor.py",
+            "shingles": 0.02,
+            "tokens": 0.2004,
+            "definitions": 0.0357,
+            "imports": 0.4,
+            "flags": 0.0,
+            "score": 0.1232
+          }
+        ],
+        "interpretation": "best measured pair 0.14: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "python-modernize",
+      "title": "Python 2 → 3 / source modernisation",
+      "task": "Migrate or clean up legacy Python syntax",
+      "kind": "toolkit-overlap",
+      "confidence": "medium",
+      "scripts": [
+        {
+          "path": "py3migrate.py",
+          "role": "2to3 driver, print fixer, tag stripping",
+          "verdict": "merge-target",
+          "backends": [
+            "lib2to3"
+          ],
+          "purpose": "Python 2→3 toolbox: detect, lib2to3 refactor, fix print, strip tags."
+        },
+        {
+          "path": "pyenhance.py",
+          "role": "escape-sequence, bytes-literal and `is` comparison fixer",
+          "verdict": "merge",
+          "purpose": "Fix invalid escapes, bytes literals and `is` comparisons in Python source."
+        }
+      ],
+      "why": "py3migrate rewrites syntax py3 cannot run; pyenhance rewrites syntax that is valid but wrong (invalid escapes, `is 'x'`). Same visitor shape, same target files.",
+      "cross_refs": [
+        "package-merge"
+      ],
+      "merge": {
+        "suggested_name": "py3migrate",
+        "strategy": "Add pyenhance's fixes as a fixer set; keep detect/refactor/fixprint subcommands.",
+        "cli_example": "py3migrate refactor --fixer escapes --fixer print --fixer is-comparison src/",
+        "flags": [
+          {
+            "flag": "--fixer",
+            "values": [
+              "print",
+              "escapes",
+              "bytes",
+              "is-comparison",
+              "six"
+            ],
+            "replaces": "pyenhance.py's hard-coded fix list"
+          },
+          {
+            "flag": "--check / --diff",
+            "replaces": "pyenhance fingerprint/compile_check reporting"
+          }
+        ],
+        "remove_files": [
+          "pyenhance.py"
+        ],
+        "effort": "M",
+        "risks": [
+          "lib2to3 is deprecated; plan the move to a token-based fixer"
+        ],
+        "payoff": "2 → 1, one rewrite registry"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "py3migrate.py",
+          "right": "pyenhance.py",
+          "shingles": 0.0088,
+          "tokens": 0.1967,
+          "definitions": 0.0441,
+          "imports": 0.3333,
+          "flags": 0.0938,
+          "score": 0.12
+        },
+        "pairs": [
+          {
+            "left": "py3migrate.py",
+            "right": "pyenhance.py",
+            "shingles": 0.0088,
+            "tokens": 0.1967,
+            "definitions": 0.0441,
+            "imports": 0.3333,
+            "flags": 0.0938,
+            "score": 0.12
+          }
+        ],
+        "interpretation": "best measured pair 0.12: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "duplicate-detection",
+      "title": "Duplicate / similarity detection for Python code",
+      "task": "Find duplicate files, duplicate definitions and near-duplicate code",
+      "kind": "near-duplicate",
+      "confidence": "high",
+      "scripts": [
+        {
+          "path": "pydup.py",
+          "role": "full engine: token, tlsh, ssdeep, joblib, trash",
+          "verdict": "merge-target",
+          "backends": [
+            "tlsh",
+            "ssdeep",
+            "joblib",
+            "xxhash"
+          ],
+          "purpose": "Find duplicate Python files, definitions and near-duplicates (token, tlsh, ssdeep)."
+        },
+        {
+          "path": "python_duplicate_finder.py",
+          "role": "sibling with the same classes, fewer engines",
+          "verdict": "merge",
+          "purpose": "Duplicate finder sibling of pydup.py with fewer engines."
+        },
+        {
+          "path": "pydeduper.py",
+          "role": "duplicate top-level definitions → utils module",
+          "verdict": "merge",
+          "purpose": "Find duplicate top-level definitions and extract them into a utils module."
+        },
+        {
+          "path": "pysim.py",
+          "role": "structural AST-hash similarity between two files",
+          "verdict": "merge",
+          "purpose": "Structural similarity of top-level definitions via AST hashes."
+        }
+      ],
+      "why": "pydup.py and python_duplicate_finder.py are structural twins (17 shared classes, identical method names, measured 0.81). The other two are the same question asked at definition granularity (pydeduper) and by compare mode (pysim).",
+      "merge": {
+        "suggested_name": "pydup",
+        "strategy": "One CLI; granularity is a mode, algorithm is an engine, actions are flags.",
+        "cli_example": "pydup --mode defs -e token --dedupe-to utils/ src/ ; pydup --mode files --trash",
+        "flags": [
+          {
+            "flag": "--mode",
+            "values": [
+              "files",
+              "defs",
+              "near",
+              "compare"
+            ],
+            "replaces": "pydup files/near + pydeduper defs + pysim compare"
+          },
+          {
+            "flag": "-e, --engine",
+            "values": [
+              "token",
+              "tlsh",
+              "ssdeep",
+              "struct"
+            ],
+            "replaces": "engine imports scattered across pydup/python_duplicate_finder"
+          },
+          {
+            "flag": "--trash / --json / --cache",
+            "replaces": "pydup action flags"
+          },
+          {
+            "flag": "--dedupe-to DIR",
+            "replaces": "pydeduper write_utils/patch_originals"
+          }
+        ],
+        "remove_files": [
+          "python_duplicate_finder.py",
+          "pydeduper.py",
+          "pysim.py"
+        ],
+        "effort": "M",
+        "risks": [
+          "ssdeep/tlsh are optional C deps; degrade to token mode"
+        ],
+        "payoff": "4 → 1; removes the largest measured duplicate (0.81)"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pydup.py",
+          "right": "python_duplicate_finder.py",
+          "shingles": 0.7006,
+          "tokens": 0.8706,
+          "definitions": 0.8219,
+          "imports": 0.8718,
+          "flags": 0.8971,
+          "score": 0.8127
+        },
+        "pairs": [
+          {
+            "left": "pydup.py",
+            "right": "python_duplicate_finder.py",
+            "shingles": 0.7006,
+            "tokens": 0.8706,
+            "definitions": 0.8219,
+            "imports": 0.8718,
+            "flags": 0.8971,
+            "score": 0.8127
+          },
+          {
+            "left": "pydeduper.py",
+            "right": "python_duplicate_finder.py",
+            "shingles": 0.0085,
+            "tokens": 0.181,
+            "definitions": 0.0064,
+            "imports": 0.2273,
+            "flags": 0.0563,
+            "score": 0.0888
+          },
+          {
+            "left": "pydeduper.py",
+            "right": "pydup.py",
+            "shingles": 0.0077,
+            "tokens": 0.1691,
+            "definitions": 0.0057,
+            "imports": 0.2292,
+            "flags": 0.0513,
+            "score": 0.0852
+          },
+          {
+            "left": "pydeduper.py",
+            "right": "pysim.py",
+            "shingles": 0.0075,
+            "tokens": 0.1167,
+            "definitions": 0.0526,
+            "imports": 0.2857,
+            "flags": 0.0,
+            "score": 0.0848
+          },
+          {
+            "left": "pydup.py",
+            "right": "pysim.py",
+            "shingles": 0.0021,
+            "tokens": 0.0589,
+            "definitions": 0.0068,
+            "imports": 0.1795,
+            "flags": 0.0,
+            "score": 0.0437
+          },
+          {
+            "left": "pysim.py",
+            "right": "python_duplicate_finder.py",
+            "shingles": 0.0024,
+            "tokens": 0.062,
+            "definitions": 0.0078,
+            "imports": 0.1714,
+            "flags": 0.0,
+            "score": 0.0435
+          }
+        ],
+        "interpretation": "best measured pair 0.81: structurally close, merge is mostly deletion"
+      }
+    },
+    {
+      "id": "pypi-download",
+      "title": "Download packages from PyPI / mirrors",
+      "task": "Fetch wheels and sdists for a package name, list file or user",
+      "kind": "variant-cluster",
+      "confidence": "high",
+      "scripts": [
+        {
+          "path": "pypidl.py",
+          "role": "mirror-aware downloader, wheel scoring, hash verify",
+          "verdict": "merge-target",
+          "backends": [
+            "requests",
+            "pycurl",
+            "rich"
+          ],
+          "purpose": "Unified PyPI downloader: mirrors, wheel scoring, hash verification."
+        },
+        {
+          "path": "pyget.py",
+          "role": "download manager with progress backends",
+          "verdict": "merge",
+          "backends": [
+            "requests",
+            "pycurl",
+            "urllib"
+          ],
+          "purpose": "pip-style download manager with progress bars and pluggable backends."
+        },
+        {
+          "path": "python_downloader.py",
+          "role": "older cwd-only sibling of pyget.py",
+          "verdict": "merge",
+          "purpose": "pip-style download manager, cwd-only older sibling of pyget.py."
+        },
+        {
+          "path": "pipget.py",
+          "role": "mirror downloader with archive validation",
+          "verdict": "merge",
+          "backends": [
+            "httpx",
+            "bs4"
+          ],
+          "purpose": "Download sdists / pure wheels from a PyPI mirror with archive validation."
+        },
+        {
+          "path": "pip_downloader.py",
+          "role": "minimal PyPI fetcher",
+          "verdict": "merge",
+          "backends": [
+            "httpx"
+          ],
+          "purpose": "Download a package's sdist/wheel from PyPI."
+        },
+        {
+          "path": "pypi_user_pkgs.py",
+          "role": "download all packages of a PyPI user/org",
+          "verdict": "merge",
+          "backends": [
+            "httpx",
+            "pycurl"
+          ],
+          "purpose": "List and download every package published by a PyPI user or org."
+        }
+      ],
+      "why": "Six scripts fetch distributions over HTTP. pyget.py and python_downloader.py are the same architecture (0.50) with three interchangeable HTTP backends in each; pypidl.py and pipget.py both add mirror selection and archive validation.",
+      "merge": {
+        "suggested_name": "pypidl",
+        "strategy": "One downloader: transport is a backend, the rest are flags/subcommands.",
+        "cli_example": "pypidl -b requests --mirror tsinghua --verify-hash numpy ; pypidl user --all pyca",
+        "flags": [
+          {
+            "flag": "-b, --backend",
+            "values": [
+              "requests",
+              "pycurl",
+              "urllib",
+              "httpx"
+            ],
+            "replaces": "Backend/PurePythonBackend/RequestsBackend/PycurlBackend and httpx paths"
+          },
+          {
+            "flag": "--mirror",
+            "replaces": "pipget and pypidl mirror tables"
+          },
+          {
+            "flag": "--users / subcommand user",
+            "replaces": "pypi_user_pkgs.py"
+          },
+          {
+            "flag": "--manager / --progress",
+            "replaces": "pyget-style download manager mode"
+          },
+          {
+            "flag": "--verify-hash",
+            "replaces": "pypidl hash verification"
+          }
+        ],
+        "remove_files": [
+          "python_downloader.py",
+          "pyget.py",
+          "pipget.py",
+          "pip_downloader.py",
+          "pypi_user_pkgs.py"
+        ],
+        "effort": "L",
+        "risks": [
+          "progress rendering differs per backend; extract one presenter first"
+        ],
+        "payoff": "6 → 1; the heaviest duplication in the repo after pdf/dup clusters"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pyget.py",
+          "right": "python_downloader.py",
+          "shingles": 0.1849,
+          "tokens": 0.59,
+          "definitions": 0.4603,
+          "imports": 0.7895,
+          "flags": 0.8889,
+          "score": 0.5023
+        },
+        "pairs": [
+          {
+            "left": "pyget.py",
+            "right": "python_downloader.py",
+            "shingles": 0.1849,
+            "tokens": 0.59,
+            "definitions": 0.4603,
+            "imports": 0.7895,
+            "flags": 0.8889,
+            "score": 0.5023
+          },
+          {
+            "left": "pipget.py",
+            "right": "pypidl.py",
+            "shingles": 0.0396,
+            "tokens": 0.3235,
+            "definitions": 0.0156,
+            "imports": 0.3478,
+            "flags": 0.44,
+            "score": 0.192
+          },
+          {
+            "left": "pypi_user_pkgs.py",
+            "right": "pypidl.py",
+            "shingles": 0.0091,
+            "tokens": 0.248,
+            "definitions": 0.027,
+            "imports": 0.5714,
+            "flags": 0.2778,
+            "score": 0.1836
+          },
+          {
+            "left": "pyget.py",
+            "right": "pypidl.py",
+            "shingles": 0.0079,
+            "tokens": 0.2443,
+            "definitions": 0.0361,
+            "imports": 0.5,
+            "flags": 0.2258,
+            "score": 0.1683
+          },
+          {
+            "left": "pypi_user_pkgs.py",
+            "right": "python_downloader.py",
+            "shingles": 0.0075,
+            "tokens": 0.2296,
+            "definitions": 0.0513,
+            "imports": 0.4762,
+            "flags": 0.2,
+            "score": 0.1613
+          },
+          {
+            "left": "pypidl.py",
+            "right": "python_downloader.py",
+            "shingles": 0.0065,
+            "tokens": 0.2189,
+            "definitions": 0.0222,
+            "imports": 0.5238,
+            "flags": 0.2121,
+            "score": 0.1609
+          }
+        ],
+        "interpretation": "best measured pair 0.50: structurally close, merge is mostly deletion"
+      }
+    },
+    {
+      "id": "pypi-search",
+      "title": "Search PyPI packages",
+      "task": "Find packages by name/description",
+      "kind": "variant-cluster",
+      "confidence": "high",
+      "scripts": [
+        {
+          "path": "psearch.py",
+          "role": "JSON API search",
+          "verdict": "merge-target",
+          "backends": [
+            "requests"
+          ],
+          "purpose": "Search PyPI packages through the JSON API."
+        },
+        {
+          "path": "pss.py",
+          "role": "local SQLite FTS5 substring search",
+          "verdict": "merge",
+          "purpose": "Substring search over a local PyPI package index (SQLite FTS5 trigram)."
+        }
+      ],
+      "why": "Same user question, two data sources: live API vs a local index for offline/fast search.",
+      "merge": {
+        "suggested_name": "psearch",
+        "strategy": "Source selectable; pss keeps its index-build subcommand.",
+        "cli_example": "psearch --source index 'numpy' ; psearch index --rebuild",
+        "flags": [
+          {
+            "flag": "--source",
+            "values": [
+              "api",
+              "index"
+            ],
+            "replaces": "two entry points"
+          },
+          {
+            "flag": "--rebuild-index",
+            "replaces": "pss.py table build path"
+          },
+          {
+            "flag": "--limit",
+            "replaces": "pss DEFAULT_LIMIT and psearch paging"
+          }
+        ],
+        "remove_files": [
+          "pss.py"
+        ],
+        "effort": "S",
+        "risks": [
+          "index lives at a hard-coded /sdcard path; make it configurable"
+        ],
+        "payoff": "2 → 1, offline search becomes a flag not a separate tool"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "psearch.py",
+          "right": "pss.py",
+          "shingles": 0.0063,
+          "tokens": 0.1479,
+          "definitions": 0.1818,
+          "imports": 0.4,
+          "flags": 0.1429,
+          "score": 0.1495
+        },
+        "pairs": [
+          {
+            "left": "psearch.py",
+            "right": "pss.py",
+            "shingles": 0.0063,
+            "tokens": 0.1479,
+            "definitions": 0.1818,
+            "imports": 0.4,
+            "flags": 0.1429,
+            "score": 0.1495
+          }
+        ],
+        "interpretation": "best measured pair 0.15: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "pypi-stats",
+      "title": "PyPI download statistics",
+      "task": "Report download counts from pypistats.org",
+      "kind": "duplicate-lineage",
+      "confidence": "high",
+      "scripts": [
+        {
+          "path": "pypi_stats.py",
+          "role": "full CLI: subcommands, cache, formats",
+          "verdict": "merge-target",
+          "backends": [
+            "urllib3",
+            "prettytable",
+            "termcolor"
+          ],
+          "purpose": "CLI for pypistats.org download statistics (subcommands, cache, formats)."
+        },
+        {
+          "path": "pypistats.py",
+          "role": "fetch/aggregate helper layer",
+          "verdict": "merge",
+          "backends": [
+            "ssl"
+          ],
+          "purpose": "Fetch and aggregate pypistats.org statistics (helper layer)."
+        }
+      ],
+      "why": "pypistats.py is the networking half of pypi_stats.py with a different entry point.",
+      "merge": {
+        "suggested_name": "pypistats",
+        "strategy": "Absorb the helper functions as private module functions; CLI stays in one file.",
+        "cli_example": "pypistats recent numpy --period week -f json",
+        "flags": [
+          {
+            "flag": "--cache-dir",
+            "replaces": "platformdirs cache location"
+          },
+          {
+            "flag": "subcommands",
+            "values": [
+              "recent",
+              "overall",
+              "python-major",
+              "python-minor",
+              "system"
+            ],
+            "replaces": "pypistats.py get_stats/aggregate callers"
+          }
+        ],
+        "remove_files": [
+          "pypistats.py"
+        ],
+        "effort": "S",
+        "risks": [
+          "pypistats.py may be imported by other scripts; grep before deleting"
+        ],
+        "payoff": "2 → 1"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pypi_stats.py",
+          "right": "pypistats.py",
+          "shingles": 0.0047,
+          "tokens": 0.0984,
+          "definitions": 0.0204,
+          "imports": 0.16,
+          "flags": 0.0,
+          "score": 0.0541
+        },
+        "pairs": [
+          {
+            "left": "pypi_stats.py",
+            "right": "pypistats.py",
+            "shingles": 0.0047,
+            "tokens": 0.0984,
+            "definitions": 0.0204,
+            "imports": 0.16,
+            "flags": 0.0,
+            "score": 0.0541
+          }
+        ],
+        "interpretation": "best measured pair 0.05: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "pypi-health",
+      "title": "Installed-package health checks",
+      "task": "Check whether installed packages import and are up to date",
+      "kind": "variant-cluster",
+      "confidence": "high",
+      "scripts": [
+        {
+          "path": "pypi_update_check.py",
+          "role": "update checker with state cache",
+          "verdict": "merge-target",
+          "backends": [
+            "packaging",
+            "pycurl",
+            "requests"
+          ],
+          "purpose": "Check installed packages for available updates with state caching."
+        },
+        {
+          "path": "pysanity-check.py",
+          "role": "import check + latest version",
+          "verdict": "merge",
+          "purpose": "Check that installed packages import and report latest versions."
+        },
+        {
+          "path": "pip_sanity_check.py",
+          "role": "installed package sanity check",
+          "verdict": "merge",
+          "purpose": "Sanity-check installed packages (import + metadata)."
+        }
+      ],
+      "why": "All three answer 'is what I have installed healthy?': two check importability, two fetch the latest version, and two keep a JSON state file.",
+      "merge": {
+        "suggested_name": "pypi-check",
+        "strategy": "One CLI with check modes; state file shared.",
+        "cli_example": "pypi-check --mode outdated --state ~/.cache/pypi-check.json ; pypi-check --mode import",
+        "flags": [
+          {
+            "flag": "--mode",
+            "values": [
+              "outdated",
+              "import",
+              "latest",
+              "all"
+            ],
+            "replaces": "three scripts"
+          },
+          {
+            "flag": "-j, --jobs",
+            "replaces": "per-script pooling"
+          },
+          {
+            "flag": "--state",
+            "replaces": "duplicated state JSON handling"
+          },
+          {
+            "flag": "--json",
+            "replaces": "output formats"
+          }
+        ],
+        "remove_files": [
+          "pip_sanity_check.py",
+          "pysanity-check.py"
+        ],
+        "effort": "S",
+        "risks": [
+          "import checks must run in a subprocess to survive broken modules"
+        ],
+        "payoff": "3 → 1"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pip_sanity_check.py",
+          "right": "pysanity-check.py",
+          "shingles": 0.0087,
+          "tokens": 0.1795,
+          "definitions": 0.0,
+          "imports": 0.4286,
+          "flags": 0.0,
+          "score": 0.1118
+        },
+        "pairs": [
+          {
+            "left": "pip_sanity_check.py",
+            "right": "pysanity-check.py",
+            "shingles": 0.0087,
+            "tokens": 0.1795,
+            "definitions": 0.0,
+            "imports": 0.4286,
+            "flags": 0.0,
+            "score": 0.1118
+          },
+          {
+            "left": "pypi_update_check.py",
+            "right": "pysanity-check.py",
+            "shingles": 0.0033,
+            "tokens": 0.1018,
+            "definitions": 0.04,
+            "imports": 0.2,
+            "flags": 0.0,
+            "score": 0.0644
+          },
+          {
+            "left": "pip_sanity_check.py",
+            "right": "pypi_update_check.py",
+            "shingles": 0.0008,
+            "tokens": 0.0982,
+            "definitions": 0.0,
+            "imports": 0.1579,
+            "flags": 0.0,
+            "score": 0.0485
+          }
+        ],
+        "interpretation": "best measured pair 0.11: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "installed-inspection",
+      "title": "Inspect installed distributions",
+      "task": "Audit site-packages: duplicates, versions, purity, deprecated APIs",
+      "kind": "variant-cluster",
+      "confidence": "medium",
+      "scripts": [
+        {
+          "path": "pkg_insoector.py",
+          "role": "duplicate/multi-version/missing-script audit",
+          "verdict": "merge-target",
+          "purpose": "Inspect site-packages: duplicate dists, multi-version installs, missing console scripts."
+        },
+        {
+          "path": "purepy.py",
+          "role": "pure-Python vs native-wheel classification via PyPI",
+          "verdict": "merge",
+          "purpose": "Classify installed packages as pure-Python vs native-wheel using PyPI metadata."
+        },
+        {
+          "path": "pkgres.py",
+          "role": "deprecated pkg_resources usage scanner",
+          "verdict": "merge",
+          "purpose": "Detect and autofix deprecated pkg_resources usage."
+        }
+      ],
+      "why": "Each walks site-packages and reports a property of the installed set; they differ only in what they check and how they fetch metadata.",
+      "merge": {
+        "suggested_name": "pkginspect",
+        "strategy": "Subcommands per audit; one site-packages enumerator underneath.",
+        "cli_example": "pkginspect duplicates ; pkginspect purity -j 8 ; pkginspect pkgresources --autofix src/",
+        "flags": [
+          {
+            "flag": "subcommands",
+            "values": [
+              "duplicates",
+              "versions",
+              "scripts",
+              "purity",
+              "pkgresources"
+            ],
+            "replaces": "pkg_insoector cmd_* + purepy + pkgres"
+          },
+          {
+            "flag": "--json",
+            "replaces": "ad-hoc report formats"
+          }
+        ],
+        "remove_files": [
+          "purepy.py",
+          "pkgres.py"
+        ],
+        "effort": "M",
+        "risks": [
+          "purepy hits the network; keep the offline dedup checks usable without it"
+        ],
+        "payoff": "3 → 1 with a shared enumerator"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pkgres.py",
+          "right": "purepy.py",
+          "shingles": 0.0066,
+          "tokens": 0.1277,
+          "definitions": 0.0769,
+          "imports": 0.5556,
+          "flags": 0.0,
+          "score": 0.1326
+        },
+        "pairs": [
+          {
+            "left": "pkgres.py",
+            "right": "purepy.py",
+            "shingles": 0.0066,
+            "tokens": 0.1277,
+            "definitions": 0.0769,
+            "imports": 0.5556,
+            "flags": 0.0,
+            "score": 0.1326
+          },
+          {
+            "left": "pkg_insoector.py",
+            "right": "pkgres.py",
+            "shingles": 0.0021,
+            "tokens": 0.1236,
+            "definitions": 0.0263,
+            "imports": 0.2941,
+            "flags": 0.0,
+            "score": 0.0809
+          },
+          {
+            "left": "pkg_insoector.py",
+            "right": "purepy.py",
+            "shingles": 0.0019,
+            "tokens": 0.1103,
+            "definitions": 0.0238,
+            "imports": 0.2632,
+            "flags": 0.0,
+            "score": 0.0724
+          }
+        ],
+        "interpretation": "best measured pair 0.13: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "pkg-maintenance",
+      "title": "Package / site-packages maintenance",
+      "task": "Install, clean, copy, repack or zip installed packages",
+      "kind": "toolkit-overlap",
+      "confidence": "medium",
+      "scripts": [
+        {
+          "path": "pkg_tools.py",
+          "role": "apt + pip + wheel toolkit",
+          "verdict": "merge-target",
+          "backends": [
+            "pip",
+            "packaging",
+            "rapidfuzz"
+          ],
+          "purpose": "apt + pip + wheel package-management toolkit (install, clean, du)."
+        },
+        {
+          "path": "pkgtools2.py",
+          "role": "Debian/Termux package + system-bin toolkit",
+          "verdict": "merge",
+          "backends": [
+            "apt",
+            "dpkg"
+          ],
+          "purpose": "Debian/Termux package and system-bin toolkit."
+        },
+        {
+          "path": "pkgtools.py",
+          "role": "copy/move/repack distributions",
+          "verdict": "merge",
+          "backends": [
+            "packaging"
+          ],
+          "purpose": "Copy, move and repack installed distributions."
+        },
+        {
+          "path": "pyzpkg.py",
+          "role": "site-packages dirs → zipimport archives",
+          "verdict": "merge",
+          "purpose": "Convert installed site-packages directories into zipimport-ready archives."
+        },
+        {
+          "path": "pyco.py",
+          "role": "__pycache__ cleanup",
+          "verdict": "merge",
+          "purpose": "Remove __pycache__ directories and report freed space."
+        }
+      ],
+      "why": "pkg_tools.py and pkgtools2.py are both 'run apt/pip and clean up the result' with the same helper shapes (run_cmd, human_size, parallel_map); pkgtools.py adds copy/repack, pyzpkg.py is repack-to-zip, pyco.py is the cleanup tail of the same workflow.",
+      "merge": {
+        "suggested_name": "pkgtool",
+        "strategy": "Subcommand CLI; manager selection is a flag, destructive actions keep --dry-run.",
+        "cli_example": "pkgtool -m apt missing-files ; pkgtool copy --to wheelhouse numpy ; pkgtool clean --pycache",
+        "flags": [
+          {
+            "flag": "-m, --manager",
+            "values": [
+              "pip",
+              "apt",
+              "wheel"
+            ],
+            "replaces": "pkg_tools vs pkgtools2 split"
+          },
+          {
+            "flag": "subcommands",
+            "values": [
+              "install",
+              "missing-files",
+              "copy",
+              "zip",
+              "clean",
+              "du"
+            ],
+            "replaces": "cmd_* methods across the five scripts"
+          },
+          {
+            "flag": "--dry-run / -y, --yes",
+            "replaces": "inconsistent confirmation flags"
+          }
+        ],
+        "remove_files": [
+          "pkgtools2.py",
+          "pkgtools.py",
+          "pyzpkg.py",
+          "pyco.py"
+        ],
+        "effort": "L",
+        "risks": [
+          "apt/dpkg calls are platform-specific; keep them behind the apt manager"
+        ],
+        "payoff": "5 → 1; the scattered 'clean' operations get one home"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pkg_tools.py",
+          "right": "pkgtools2.py",
+          "shingles": 0.0084,
+          "tokens": 0.2097,
+          "definitions": 0.0548,
+          "imports": 0.3704,
+          "flags": 0.0563,
+          "score": 0.1271
+        },
+        "pairs": [
+          {
+            "left": "pkg_tools.py",
+            "right": "pkgtools2.py",
+            "shingles": 0.0084,
+            "tokens": 0.2097,
+            "definitions": 0.0548,
+            "imports": 0.3704,
+            "flags": 0.0563,
+            "score": 0.1271
+          },
+          {
+            "left": "pkg_tools.py",
+            "right": "pkgtools.py",
+            "shingles": 0.0061,
+            "tokens": 0.1994,
+            "definitions": 0.0308,
+            "imports": 0.4,
+            "flags": 0.0702,
+            "score": 0.1249
+          },
+          {
+            "left": "pkgtools.py",
+            "right": "pkgtools2.py",
+            "shingles": 0.0068,
+            "tokens": 0.1936,
+            "definitions": 0.0357,
+            "imports": 0.3913,
+            "flags": 0.0385,
+            "score": 0.1201
+          },
+          {
+            "left": "pkgtools.py",
+            "right": "pyzpkg.py",
+            "shingles": 0.0055,
+            "tokens": 0.1429,
+            "definitions": 0.0345,
+            "imports": 0.4706,
+            "flags": 0.0,
+            "score": 0.1148
+          },
+          {
+            "left": "pkgtools2.py",
+            "right": "pyzpkg.py",
+            "shingles": 0.0017,
+            "tokens": 0.0921,
+            "definitions": 0.0256,
+            "imports": 0.35,
+            "flags": 0.0,
+            "score": 0.0812
+          },
+          {
+            "left": "pkg_tools.py",
+            "right": "pyzpkg.py",
+            "shingles": 0.0014,
+            "tokens": 0.0952,
+            "definitions": 0.0208,
+            "imports": 0.3043,
+            "flags": 0.0,
+            "score": 0.074
+          }
+        ],
+        "interpretation": "best measured pair 0.13: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "pip-ops",
+      "title": "pip install/uninstall operations",
+      "task": "Uninstall or reinstall installed packages",
+      "kind": "variant-cluster",
+      "confidence": "medium",
+      "scripts": [
+        {
+          "path": "piu.py",
+          "role": "uninstall with wildcard matching",
+          "verdict": "merge-target",
+          "backends": [
+            "pip"
+          ],
+          "purpose": "Uninstall installed packages, with wildcard matching."
+        },
+        {
+          "path": "pip_reinstaller.py",
+          "role": "reinstall pure-Python or listed packages",
+          "verdict": "merge",
+          "backends": [
+            "pip"
+          ],
+          "purpose": "Reinstall pure-Python packages, or packages listed in a file."
+        }
+      ],
+      "why": "Both are thin wrappers that resolve package lists and call pip's internal main().",
+      "merge": {
+        "suggested_name": "pipop",
+        "strategy": "Two subcommands over one resolver.",
+        "cli_example": "pipop uninstall -w numpy* ; pipop reinstall --pure -j 8",
+        "flags": [
+          {
+            "flag": "subcommands",
+            "values": [
+              "uninstall",
+              "reinstall"
+            ],
+            "replaces": "the two scripts"
+          },
+          {
+            "flag": "-w, --wildcard",
+            "replaces": "piu.py wildcard mode"
+          },
+          {
+            "flag": "-l, --list-file",
+            "replaces": "pip_reinstaller.py list parsing"
+          },
+          {
+            "flag": "--pure",
+            "replaces": "pip_reinstaller.py pure-python filter"
+          }
+        ],
+        "remove_files": [
+          "pip_reinstaller.py"
+        ],
+        "effort": "S",
+        "risks": [
+          "pip._internal is unstable API; pin or prefer subprocess pip"
+        ],
+        "payoff": "2 → 1"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pip_reinstaller.py",
+          "right": "piu.py",
+          "shingles": 0.0028,
+          "tokens": 0.1316,
+          "definitions": 0.0,
+          "imports": 0.5,
+          "flags": 0.0,
+          "score": 0.1087
+        },
+        "pairs": [
+          {
+            "left": "pip_reinstaller.py",
+            "right": "piu.py",
+            "shingles": 0.0028,
+            "tokens": 0.1316,
+            "definitions": 0.0,
+            "imports": 0.5,
+            "flags": 0.0,
+            "score": 0.1087
+          }
+        ],
+        "interpretation": "best measured pair 0.11: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "file-renamer",
+      "title": "File / directory renamers",
+      "task": "Rename files with patterns, templates, case and unicode transforms",
+      "kind": "duplicate-lineage",
+      "confidence": "high",
+      "scripts": [
+        {
+          "path": "pnr2.py",
+          "role": "superset renamer: regex, template, undo, preview",
+          "verdict": "merge-target",
+          "purpose": "Advanced renamer: regex, template, case/unicode transforms, undo log."
+        },
+        {
+          "path": "pnr.py",
+          "role": "remove/replace/template renamer (older)",
+          "verdict": "merge",
+          "purpose": "Rename files/dirs by removing or replacing strings, or templating numbers."
+        }
+      ],
+      "why": "pnr.py is the ancestor; pnr2.py already implements every pnr.py flag plus undo.",
+      "merge": {
+        "suggested_name": "pnr",
+        "strategy": "Delete the old script; keep pnr2's behaviour under the short name.",
+        "cli_example": "pnr -r old -s new --regex --dry-run ; pnr -t img --start 1 --padding 3 --undo log.json",
+        "flags": [
+          {
+            "flag": "--remove / --replace",
+            "replaces": "pnr.py core options"
+          },
+          {
+            "flag": "-t, --template",
+            "replaces": "both template implementations"
+          },
+          {
+            "flag": "--dry-run / --undo",
+            "replaces": "pnr2 preview and undo log"
+          }
+        ],
+        "remove_files": [
+          "pnr.py"
+        ],
+        "effort": "S",
+        "risks": [
+          "renaming is destructive; keep --dry-run default-on when ambiguous"
+        ],
+        "payoff": "2 → 1, no behaviour loss"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pnr.py",
+          "right": "pnr2.py",
+          "shingles": 0.0108,
+          "tokens": 0.1844,
+          "definitions": 0.125,
+          "imports": 0.3077,
+          "flags": 0.1207,
+          "score": 0.1326
+        },
+        "pairs": [
+          {
+            "left": "pnr.py",
+            "right": "pnr2.py",
+            "shingles": 0.0108,
+            "tokens": 0.1844,
+            "definitions": 0.125,
+            "imports": 0.3077,
+            "flags": 0.1207,
+            "score": 0.1326
+          }
+        ],
+        "interpretation": "best measured pair 0.13: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "text-hygiene",
+      "title": "Text-file hygiene (line endings, BOM, final newline)",
+      "task": "Detect or fix CRLF, BOM and missing trailing newlines",
+      "kind": "variant-cluster",
+      "confidence": "high",
+      "scripts": [
+        {
+          "path": "pyfslint.py",
+          "role": "linter over a tree (CRLF/BOM/binary/final newline)",
+          "verdict": "merge-target",
+          "purpose": "Lint text files for CRLF, BOM, missing final newline and binary content."
+        },
+        {
+          "path": "pydos2unix.py",
+          "role": "CRLF→LF via dos2unix",
+          "verdict": "merge",
+          "backends": [
+            "dos2unix"
+          ],
+          "purpose": "Convert CRLF to LF across a tree (dos2unix wrapper)."
+        },
+        {
+          "path": "pydos2unix2.py",
+          "role": "CRLF→LF with mmap + workers",
+          "verdict": "merge",
+          "backends": [
+            "mmap"
+          ],
+          "purpose": "Fast CRLF→LF converter with mmap, worker pool and error log."
+        }
+      ],
+      "why": "pyfslint reports exactly what the two converters rewrite, and the converters perform the same transformation at different speeds: one shells out to dos2unix, the other uses mmap and a worker pool.",
+      "merge": {
+        "suggested_name": "pyfslint",
+        "strategy": "Lint by default, fix with --fix; converter implementation is a backend.",
+        "cli_example": "pyfslint --fix newline -b mmap -j 8 src/ ; pyfslint --check .",
+        "flags": [
+          {
+            "flag": "-b, --backend",
+            "values": [
+              "stream",
+              "mmap",
+              "dos2unix"
+            ],
+            "replaces": "pydos2unix (external binary) vs pydos2unix2 (mmap)"
+          },
+          {
+            "flag": "--fix",
+            "values": [
+              "newline",
+              "bom",
+              "final-newline"
+            ],
+            "replaces": "converter side effects"
+          },
+          {
+            "flag": "-j, --jobs / --error-log",
+            "replaces": "pydos2unix2 worker pool"
+          },
+          {
+            "flag": "--check",
+            "replaces": "pyfslint default report"
+          }
+        ],
+        "remove_files": [
+          "pydos2unix.py",
+          "pydos2unix2.py"
+        ],
+        "effort": "S",
+        "risks": [
+          "binary detection must run before any rewrite"
+        ],
+        "payoff": "3 → 1; the backend flag covers both the external binary and the in-process mmap path"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pydos2unix.py",
+          "right": "pydos2unix2.py",
+          "shingles": 0.0134,
+          "tokens": 0.1495,
+          "definitions": 0.0667,
+          "imports": 0.3846,
+          "flags": 0.1111,
+          "score": 0.1235
+        },
+        "pairs": [
+          {
+            "left": "pydos2unix.py",
+            "right": "pydos2unix2.py",
+            "shingles": 0.0134,
+            "tokens": 0.1495,
+            "definitions": 0.0667,
+            "imports": 0.3846,
+            "flags": 0.1111,
+            "score": 0.1235
+          },
+          {
+            "left": "pydos2unix.py",
+            "right": "pyfslint.py",
+            "shingles": 0.0069,
+            "tokens": 0.1167,
+            "definitions": 0.0303,
+            "imports": 0.2222,
+            "flags": 0.0,
+            "score": 0.0706
+          },
+          {
+            "left": "pydos2unix2.py",
+            "right": "pyfslint.py",
+            "shingles": 0.0062,
+            "tokens": 0.0716,
+            "definitions": 0.027,
+            "imports": 0.2632,
+            "flags": 0.0,
+            "score": 0.0646
+          }
+        ],
+        "interpretation": "best measured pair 0.12: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "file-diff",
+      "title": "File comparison / diffing",
+      "task": "Compare files (text lines, bytecode) and act on the result",
+      "kind": "variant-cluster",
+      "confidence": "high",
+      "scripts": [
+        {
+          "path": "pydiff.py",
+          "role": "line diff with hashing, grouping and move",
+          "verdict": "merge-target",
+          "backends": [
+            "dh"
+          ],
+          "purpose": "Line diff that hashes/groups differing files and can move them."
+        },
+        {
+          "path": "pdiff.py",
+          "role": "AST/bytecode-level diff of Python files",
+          "verdict": "merge",
+          "backends": [
+            "dis",
+            "ast"
+          ],
+          "purpose": "Diff two Python files by AST / bytecode instead of text."
+        },
+        {
+          "path": "pdif.py",
+          "role": "naive membership line compare",
+          "verdict": "merge",
+          "purpose": "Naive line-by-line file comparison based on line membership."
+        }
+      ],
+      "why": "Three comparison granularities for the same question; pydiff already has the plumbing.",
+      "merge": {
+        "suggested_name": "pydiff",
+        "strategy": "Comparison level is a mode; the move/group action stays.",
+        "cli_example": "pydiff --mode bytecode a.py b.py ; pydiff --mode lines --move-to changed/ a/ b/",
+        "flags": [
+          {
+            "flag": "--mode",
+            "values": [
+              "lines",
+              "bytecode",
+              "groups"
+            ],
+            "replaces": "pdif/pdiff/pydiff"
+          },
+          {
+            "flag": "--move-to",
+            "replaces": "pydiff next_group_dir"
+          },
+          {
+            "flag": "--ignore-whitespace",
+            "replaces": "manual normalisation in pdif"
+          }
+        ],
+        "remove_files": [
+          "pdif.py",
+          "pdiff.py"
+        ],
+        "effort": "S",
+        "risks": [
+          "bytecode diff needs identical interpreter versions"
+        ],
+        "payoff": "3 → 1"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pdif.py",
+          "right": "pydiff.py",
+          "shingles": 0.0042,
+          "tokens": 0.1037,
+          "definitions": 0.0,
+          "imports": 0.25,
+          "flags": 0.0,
+          "score": 0.0647
+        },
+        "pairs": [
+          {
+            "left": "pdif.py",
+            "right": "pydiff.py",
+            "shingles": 0.0042,
+            "tokens": 0.1037,
+            "definitions": 0.0,
+            "imports": 0.25,
+            "flags": 0.0,
+            "score": 0.0647
+          },
+          {
+            "left": "pdiff.py",
+            "right": "pydiff.py",
+            "shingles": 0.0031,
+            "tokens": 0.0729,
+            "definitions": 0.0556,
+            "imports": 0.125,
+            "flags": 0.0,
+            "score": 0.049
+          },
+          {
+            "left": "pdif.py",
+            "right": "pdiff.py",
+            "shingles": 0.0053,
+            "tokens": 0.0661,
+            "definitions": 0.0,
+            "imports": 0.1667,
+            "flags": 0.0,
+            "score": 0.0431
+          }
+        ],
+        "interpretation": "best measured pair 0.06: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "pickle-json",
+      "title": "Pickle → JSON conversion",
+      "task": "Convert pickle files to JSON",
+      "kind": "variant-cluster",
+      "confidence": "high",
+      "scripts": [
+        {
+          "path": "pklr.py",
+          "role": "processor: json/raw/sanitise",
+          "verdict": "merge-target",
+          "purpose": "Pickle processor: JSON conversion, raw dump, sanitising."
+        },
+        {
+          "path": "pkl2json.py",
+          "role": "pandas-assisted conversion",
+          "verdict": "merge",
+          "backends": [
+            "pandas"
+          ],
+          "purpose": "Convert a pickle file to JSON."
+        },
+        {
+          "path": "pkltojson.py",
+          "role": "recursive serialiser",
+          "verdict": "merge",
+          "purpose": "Convert a pickle to JSON with best-effort serialisation."
+        }
+      ],
+      "why": "Same conversion with three different fallback strategies for non-JSON-safe objects.",
+      "merge": {
+        "suggested_name": "pklr",
+        "strategy": "One converter; output style and coercion strategy are flags.",
+        "cli_example": "pklr data.pkl --format json --coerce pandas ; pklr data.pkl --raw",
+        "flags": [
+          {
+            "flag": "--format",
+            "values": [
+              "json",
+              "raw",
+              "pretty"
+            ],
+            "replaces": "three scripts"
+          },
+          {
+            "flag": "--coerce",
+            "values": [
+              "strict",
+              "recursive",
+              "pandas"
+            ],
+            "replaces": "pkltojson recursive serialiser + pkl2json pandas path"
+          },
+          {
+            "flag": "-o, --output",
+            "replaces": "per-script output handling"
+          }
+        ],
+        "remove_files": [
+          "pkl2json.py",
+          "pkltojson.py"
+        ],
+        "effort": "S",
+        "risks": [
+          "pandas path is heavy; keep it optional"
+        ],
+        "payoff": "3 → 1"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pklr.py",
+          "right": "pkltojson.py",
+          "shingles": 0.071,
+          "tokens": 0.4336,
+          "definitions": 0.1111,
+          "imports": 0.8571,
+          "flags": 0.0,
+          "score": 0.2805
+        },
+        "pairs": [
+          {
+            "left": "pklr.py",
+            "right": "pkltojson.py",
+            "shingles": 0.071,
+            "tokens": 0.4336,
+            "definitions": 0.1111,
+            "imports": 0.8571,
+            "flags": 0.0,
+            "score": 0.2805
+          },
+          {
+            "left": "pkl2json.py",
+            "right": "pkltojson.py",
+            "shingles": 0.0062,
+            "tokens": 0.2039,
+            "definitions": 0.1667,
+            "imports": 0.375,
+            "flags": 0.0,
+            "score": 0.1424
+          },
+          {
+            "left": "pkl2json.py",
+            "right": "pklr.py",
+            "shingles": 0.0066,
+            "tokens": 0.1571,
+            "definitions": 0.125,
+            "imports": 0.3333,
+            "flags": 0.0,
+            "score": 0.1163
+          }
+        ],
+        "interpretation": "best measured pair 0.28: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "notebook-convert",
+      "title": "Python script → Jupyter notebook",
+      "task": "Convert a .py script into an .ipynb notebook",
+      "kind": "variant-cluster",
+      "confidence": "high",
+      "scripts": [
+        {
+          "path": "py2ipynb.py",
+          "role": "marker-based cell splitting",
+          "verdict": "merge-target",
+          "backends": [
+            "nbformat"
+          ],
+          "purpose": "Convert a Python script to a notebook, splitting at cell markers."
+        },
+        {
+          "path": "pytoipynb.py",
+          "role": "simple cell splitting",
+          "verdict": "merge",
+          "backends": [
+            "nbformat"
+          ],
+          "purpose": "Convert a script to a notebook (simple cell splitting)."
+        }
+      ],
+      "why": "Two nbformat writers with different cell-splitting heuristics.",
+      "merge": {
+        "suggested_name": "py2ipynb",
+        "strategy": "One writer; splitting heuristic is a flag.",
+        "cli_example": "py2ipynb --style markers script.py ; py2ipynb --style simple script.py",
+        "flags": [
+          {
+            "flag": "--style",
+            "values": [
+              "markers",
+              "simple"
+            ],
+            "replaces": "the two scripts"
+          },
+          {
+            "flag": "--cell-marker",
+            "replaces": "hard-coded '%%' detection"
+          },
+          {
+            "flag": "-o, --output",
+            "replaces": "per-script naming"
+          }
+        ],
+        "remove_files": [
+          "pytoipynb.py"
+        ],
+        "effort": "S",
+        "risks": [
+          "keep the output valid for nbformat 4"
+        ],
+        "payoff": "2 → 1"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "py2ipynb.py",
+          "right": "pytoipynb.py",
+          "shingles": 0.0349,
+          "tokens": 0.2763,
+          "definitions": 0.0,
+          "imports": 0.5714,
+          "flags": 0.0,
+          "score": 0.1653
+        },
+        "pairs": [
+          {
+            "left": "py2ipynb.py",
+            "right": "pytoipynb.py",
+            "shingles": 0.0349,
+            "tokens": 0.2763,
+            "definitions": 0.0,
+            "imports": 0.5714,
+            "flags": 0.0,
+            "score": 0.1653
+          }
+        ],
+        "interpretation": "best measured pair 0.17: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "formatting",
+      "title": "Formatting and minification",
+      "task": "Format or minify web assets and code",
+      "kind": "toolkit-overlap",
+      "confidence": "high",
+      "scripts": [
+        {
+          "path": "pyfmt.py",
+          "role": "HTML/CSS/JS/JSON formatter with tool glue",
+          "verdict": "merge-target",
+          "backends": [
+            "yapf",
+            "cssbeautifier",
+            "jsbeautifier",
+            "tree_sitter"
+          ],
+          "purpose": "Unified HTML/CSS/JS/JSON formatter and linter glue."
+        },
+        {
+          "path": "pyterser.py",
+          "role": "terser minifier wrapper",
+          "verdict": "merge",
+          "backends": [
+            "terser"
+          ],
+          "purpose": "Minify JS/TS with terser."
+        },
+        {
+          "path": "pret2.py",
+          "role": "prettier runner with error folder and workers",
+          "verdict": "merge",
+          "backends": [
+            "prettier"
+          ],
+          "purpose": "Run prettier over JS/TS/CSS/HTML/JSON trees with error folder, workers, timeout."
+        },
+        {
+          "path": "pret.py",
+          "role": "minimal prettier wrapper",
+          "verdict": "merge",
+          "purpose": "Run prettier over the given files (minimal wrapper)."
+        }
+      ],
+      "why": "pyfmt.py already merges eight formatters; pret/pret2 call prettier, pyterser calls terser — the same 'walk files, run an external formatter' loop three more times.",
+      "merge": {
+        "suggested_name": "pyfmt",
+        "strategy": "External tools become engines; one walker and one error policy.",
+        "cli_example": "pyfmt -e prettier --jobs 8 src/ ; pyfmt -e terser --minify dist/*.js",
+        "flags": [
+          {
+            "flag": "-e, --engine",
+            "values": [
+              "yapf",
+              "tree-sitter",
+              "prettier",
+              "terser",
+              "js-beautify",
+              "css-beautify"
+            ],
+            "replaces": "pyfmt tool table + pret/pret2/pyterser"
+          },
+          {
+            "flag": "--minify",
+            "replaces": "pyterser mode"
+          },
+          {
+            "flag": "-j, --jobs / --error-dir",
+            "replaces": "pret2 worker pool and error folder"
+          },
+          {
+            "flag": "--check / --diff",
+            "replaces": "pyfmt check mode"
+          }
+        ],
+        "remove_files": [
+          "pret.py",
+          "pret2.py",
+          "pyterser.py"
+        ],
+        "effort": "M",
+        "risks": [
+          "global node binaries; keep engine detection explicit"
+        ],
+        "payoff": "4 → 1; pret2's robustness (timeouts, error folder) benefits every engine"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pyfmt.py",
+          "right": "pyterser.py",
+          "shingles": 0.0136,
+          "tokens": 0.197,
+          "definitions": 0.0233,
+          "imports": 0.28,
+          "flags": 0.0667,
+          "score": 0.1066
+        },
+        "pairs": [
+          {
+            "left": "pyfmt.py",
+            "right": "pyterser.py",
+            "shingles": 0.0136,
+            "tokens": 0.197,
+            "definitions": 0.0233,
+            "imports": 0.28,
+            "flags": 0.0667,
+            "score": 0.1066
+          },
+          {
+            "left": "pret.py",
+            "right": "pret2.py",
+            "shingles": 0.0032,
+            "tokens": 0.1458,
+            "definitions": 0.0909,
+            "imports": 0.2222,
+            "flags": 0.0,
+            "score": 0.0889
+          },
+          {
+            "left": "pret2.py",
+            "right": "pyterser.py",
+            "shingles": 0.004,
+            "tokens": 0.1019,
+            "definitions": 0.0385,
+            "imports": 0.3571,
+            "flags": 0.0,
+            "score": 0.0879
+          },
+          {
+            "left": "pret2.py",
+            "right": "pyfmt.py",
+            "shingles": 0.0132,
+            "tokens": 0.1208,
+            "definitions": 0.0294,
+            "imports": 0.2273,
+            "flags": 0.05,
+            "score": 0.0791
+          },
+          {
+            "left": "pret.py",
+            "right": "pyterser.py",
+            "shingles": 0.0,
+            "tokens": 0.0515,
+            "definitions": 0.1053,
+            "imports": 0.2308,
+            "flags": 0.0,
+            "score": 0.0686
+          },
+          {
+            "left": "pret.py",
+            "right": "pyfmt.py",
+            "shingles": 0.0021,
+            "tokens": 0.0645,
+            "definitions": 0.0357,
+            "imports": 0.1429,
+            "flags": 0.0,
+            "score": 0.0453
+          }
+        ],
+        "interpretation": "best measured pair 0.11: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "optimizers",
+      "title": "Asset optimiser wrappers",
+      "task": "Run an external optimiser (pngquant / svgo) over a file tree",
+      "kind": "near-duplicate",
+      "confidence": "high",
+      "scripts": [
+        {
+          "path": "pngq.py",
+          "role": "pngquant wrapper",
+          "verdict": "merge-target",
+          "backends": [
+            "pngquant"
+          ],
+          "purpose": "Optimise PNGs with pngquant across a file tree."
+        },
+        {
+          "path": "pysvg.py",
+          "role": "svgo wrapper",
+          "verdict": "merge",
+          "backends": [
+            "svgo"
+          ],
+          "purpose": "Optimise SVGs with svgo across a file tree."
+        }
+      ],
+      "why": "Structurally identical (walk → optimise_one → saved/bytes report), measured 0.58 the highest score outside the true duplicates — only the binary and extension differ.",
+      "merge": {
+        "suggested_name": "pyopt",
+        "strategy": "One wrapper; asset type picks the optimiser, or pass a binary explicitly.",
+        "cli_example": "pyopt --type svg assets/ ; pyopt --type png --quality 80 img/",
+        "flags": [
+          {
+            "flag": "--type",
+            "values": [
+              "png",
+              "svg"
+            ],
+            "replaces": "the two scripts"
+          },
+          {
+            "flag": "--bin",
+            "replaces": "hard-coded pngquant/svgo paths"
+          },
+          {
+            "flag": "--jobs / --dry-run",
+            "replaces": "both walkers"
+          }
+        ],
+        "remove_files": [
+          "pysvg.py"
+        ],
+        "effort": "S",
+        "risks": [
+          "flag vocabularies differ per binary; pass --extra-args through"
+        ],
+        "payoff": "2 → 1; template for future optimisers (jpeg, webp)"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pngq.py",
+          "right": "pysvg.py",
+          "shingles": 0.4243,
+          "tokens": 0.746,
+          "definitions": 0.4,
+          "imports": 1.0,
+          "flags": 0.375,
+          "score": 0.5813
+        },
+        "pairs": [
+          {
+            "left": "pngq.py",
+            "right": "pysvg.py",
+            "shingles": 0.4243,
+            "tokens": 0.746,
+            "definitions": 0.4,
+            "imports": 1.0,
+            "flags": 0.375,
+            "score": 0.5813
+          }
+        ],
+        "interpretation": "best measured pair 0.58: structurally close, merge is mostly deletion"
+      }
+    },
+    {
+      "id": "bat-clone",
+      "title": "bat-style file viewer",
+      "task": "View files with syntax highlighting, line ranges and paging",
+      "kind": "near-duplicate",
+      "confidence": "high",
+      "scripts": [
+        {
+          "path": "pbat.py",
+          "role": "bat clone with highlighting, ranges, paging",
+          "verdict": "merge-target",
+          "backends": [
+            "pygments"
+          ],
+          "purpose": "bat-style file viewer: syntax highlighting, line ranges, paging."
+        },
+        {
+          "path": "pybat.py",
+          "role": "byte-identical sibling of pbat.py",
+          "verdict": "merge",
+          "purpose": "Identical sibling of pbat.py (bat clone)."
+        }
+      ],
+      "why": "The highest measured pair in the repo (0.92, identical imports, flags and definitions): pybat.py is a copy of pbat.py, so there is nothing to reconcile, only one file to delete.",
+      "merge": {
+        "suggested_name": "pbat",
+        "strategy": "Delete pybat.py; keep pbat.py (shorter name, same behaviour).",
+        "cli_example": "pbat -n 40 file.py",
+        "flags": [
+          {
+            "flag": "(none)",
+            "values": [],
+            "replaces": "no behaviour change; pure duplicate removal"
+          }
+        ],
+        "remove_files": [
+          "pybat.py"
+        ],
+        "effort": "S",
+        "risks": [
+          "check whether shell aliases or rc files call pybat.py before deleting"
+        ],
+        "payoff": "2 → 1 with zero porting risk; do this one first"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pbat.py",
+          "right": "pybat.py",
+          "shingles": 0.7822,
+          "tokens": 0.9831,
+          "definitions": 0.9259,
+          "imports": 1.0,
+          "flags": 1.0,
+          "score": 0.9156
+        },
+        "pairs": [
+          {
+            "left": "pbat.py",
+            "right": "pybat.py",
+            "shingles": 0.7822,
+            "tokens": 0.9831,
+            "definitions": 0.9259,
+            "imports": 1.0,
+            "flags": 1.0,
+            "score": 0.9156
+          }
+        ],
+        "interpretation": "best measured pair 0.92: structurally close, merge is mostly deletion"
+      }
+    },
+    {
+      "id": "path-tools",
+      "title": "PATH inspection",
+      "task": "Show and diagnose the PATH environment variable",
+      "kind": "duplicate-lineage",
+      "confidence": "high",
+      "scripts": [
+        {
+          "path": "pathdiag.py",
+          "role": "full diagnostic + optional rc rewrite",
+          "verdict": "merge-target",
+          "purpose": "Diagnose PATH: duplicates, shadowed binaries, alias/function collisions, optional rc rewrite."
+        },
+        {
+          "path": "pathcmd.py",
+          "role": "prints PATH entries only",
+          "verdict": "merge",
+          "purpose": "Print every PATH entry, one per line."
+        }
+      ],
+      "why": "pathcmd.py is the first screen of pathdiag.py's output.",
+      "merge": {
+        "suggested_name": "pathdiag",
+        "strategy": "Fold the printer in as the default subcommand.",
+        "cli_example": "pathdiag show ; pathdiag conflicts --fix-dedup",
+        "flags": [
+          {
+            "flag": "subcommands",
+            "values": [
+              "show",
+              "conflicts",
+              "aliases"
+            ],
+            "replaces": "pathcmd.py + pathdiag sections"
+          },
+          {
+            "flag": "--fix-dedup / --rc-file",
+            "replaces": "pathdiag update_rc_file"
+          }
+        ],
+        "remove_files": [
+          "pathcmd.py"
+        ],
+        "effort": "S",
+        "risks": [
+          "rc rewriting must keep --dry-run"
+        ],
+        "payoff": "2 → 1"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pathcmd.py",
+          "right": "pathdiag.py",
+          "shingles": 0.0,
+          "tokens": 0.0533,
+          "definitions": 0.0,
+          "imports": 0.2222,
+          "flags": 0.0,
+          "score": 0.0467
+        },
+        "pairs": [
+          {
+            "left": "pathcmd.py",
+            "right": "pathdiag.py",
+            "shingles": 0.0,
+            "tokens": 0.0533,
+            "definitions": 0.0,
+            "imports": 0.2222,
+            "flags": 0.0,
+            "score": 0.0467
+          }
+        ],
+        "interpretation": "best measured pair 0.05: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "file-search",
+      "title": "Recursive file / content search",
+      "task": "Search files by content or pick one interactively",
+      "kind": "variant-cluster",
+      "confidence": "medium",
+      "scripts": [
+        {
+          "path": "pyrg.py",
+          "role": "ripgrep-like search with type presets",
+          "verdict": "merge-target",
+          "backends": [
+            "loguru"
+          ],
+          "purpose": "ripgrep-like recursive search with type presets and glob filters."
+        },
+        {
+          "path": "pfzf.py",
+          "role": "interactive fuzzy picker with preview",
+          "verdict": "merge",
+          "purpose": "Interactive fuzzy finder (fzf-like) over stdin lines with a preview pane."
+        },
+        {
+          "path": "pysearch.py",
+          "role": "search toolkit: grep/names/strings/regex/info (excluded from rewrite)",
+          "verdict": "merge",
+          "purpose": "File/content search toolkit (grep/ls/hex/info) — excluded from the rewrite."
+        }
+      ],
+      "why": "pyrg.py finds matches; pfzf.py lets a human pick from candidates. A single binary with an interactive mode removes the 'pipe rg into fzf' glue users have to write.",
+      "merge": {
+        "suggested_name": "pyrg",
+        "strategy": "Add --interactive that hands results to the existing TUI; keep pysearch as legacy.",
+        "cli_example": "pyrg -t py 'TODO' --interactive ; pyrg --fuzzy < files.txt",
+        "flags": [
+          {
+            "flag": "-i, --interactive / --fuzzy",
+            "replaces": "pfzf.py standalone entry point"
+          },
+          {
+            "flag": "--preview-cmd",
+            "replaces": "pfzf preview wiring"
+          },
+          {
+            "flag": "-t, --type / --glob",
+            "replaces": "pyrg presets"
+          }
+        ],
+        "remove_files": [
+          "pfzf.py"
+        ],
+        "effort": "M",
+        "risks": [
+          "pyrg performance relies on a fast walker; keep the picker lazy"
+        ],
+        "payoff": "2 → 1; pysearch.py stays as the reference implementation"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pyrg.py",
+          "right": "pysearch.py",
+          "shingles": 0.0154,
+          "tokens": 0.2504,
+          "definitions": 0.0164,
+          "imports": 0.3846,
+          "flags": 0.3478,
+          "score": 0.163
+        },
+        "pairs": [
+          {
+            "left": "pyrg.py",
+            "right": "pysearch.py",
+            "shingles": 0.0154,
+            "tokens": 0.2504,
+            "definitions": 0.0164,
+            "imports": 0.3846,
+            "flags": 0.3478,
+            "score": 0.163
+          },
+          {
+            "left": "pfzf.py",
+            "right": "pysearch.py",
+            "shingles": 0.0,
+            "tokens": 0.0754,
+            "definitions": 0.0,
+            "imports": 0.2174,
+            "flags": 0.0,
+            "score": 0.0515
+          },
+          {
+            "left": "pfzf.py",
+            "right": "pyrg.py",
+            "shingles": 0.0016,
+            "tokens": 0.081,
+            "definitions": 0.0,
+            "imports": 0.2,
+            "flags": 0.0,
+            "score": 0.0507
+          }
+        ],
+        "interpretation": "best measured pair 0.16: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "scaffolding",
+      "title": "Project scaffolding",
+      "task": "Create a new project skeleton (Python or Rust) and package metadata",
+      "kind": "variant-cluster",
+      "confidence": "high",
+      "scripts": [
+        {
+          "path": "pydevtools.py",
+          "role": "scaffold/package Python or Rust projects",
+          "verdict": "merge-target",
+          "backends": [
+            "tomli",
+            "cargo"
+          ],
+          "purpose": "Scaffold and package Python or Rust projects (pyproject, cargo)."
+        },
+        {
+          "path": "pyproj.py",
+          "role": "scaffold Python project + create GitHub repo",
+          "verdict": "merge",
+          "backends": [
+            "dotenv"
+          ],
+          "purpose": "Scaffold a new Python project and create/push its GitHub repository."
+        }
+      ],
+      "why": "Same rendering problem: emit pyproject/__init__/package files from a template + user data.",
+      "merge": {
+        "suggested_name": "pyproj",
+        "strategy": "One generator; language/layout are flags, GitHub publishing is opt-in.",
+        "cli_example": "pyproj new mypkg --layout src --rust --github ; pyproj cargo-toml .",
+        "flags": [
+          {
+            "flag": "--layout",
+            "values": [
+              "src",
+              "flat",
+              "package",
+              "single-file"
+            ],
+            "replaces": "pyproj render_*_files + pydevtools renderers"
+          },
+          {
+            "flag": "--rust / --cargo",
+            "replaces": "pydevtools cargo toml support"
+          },
+          {
+            "flag": "--github",
+            "replaces": "pyproj repo creation/push"
+          },
+          {
+            "flag": "--publish / --meta",
+            "replaces": "pydevtools packaging reads"
+          }
+        ],
+        "remove_files": [
+          "pydevtools.py"
+        ],
+        "effort": "M",
+        "risks": [
+          "pyproj touches the network/credentials; keep that path explicit and optional"
+        ],
+        "payoff": "2 → 1"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pydevtools.py",
+          "right": "pyproj.py",
+          "shingles": 0.0096,
+          "tokens": 0.1973,
+          "definitions": 0.0167,
+          "imports": 0.35,
+          "flags": 0.0,
+          "score": 0.108
+        },
+        "pairs": [
+          {
+            "left": "pydevtools.py",
+            "right": "pyproj.py",
+            "shingles": 0.0096,
+            "tokens": 0.1973,
+            "definitions": 0.0167,
+            "imports": 0.35,
+            "flags": 0.0,
+            "score": 0.108
+          }
+        ],
+        "interpretation": "best measured pair 0.11: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "ast-extraction",
+      "title": "Python source extraction",
+      "task": "Pull definitions or documentation out of Python files",
+      "kind": "variant-cluster",
+      "confidence": "medium",
+      "scripts": [
+        {
+          "path": "pyextract.py",
+          "role": "extract defs/classes/constants to splits, sqlite, archive",
+          "verdict": "merge-target",
+          "backends": [
+            "libcst",
+            "tree_sitter"
+          ],
+          "purpose": "Extract functions/classes/constants from files, archives or trees (AST/libcst/sqlite)."
+        },
+        {
+          "path": "pydocr.py",
+          "role": "extract docstrings to Markdown",
+          "verdict": "merge",
+          "purpose": "Extract docstrings and AST docs from modules into Markdown."
+        }
+      ],
+      "why": "Both parse the same AST/libcst trees and serialise a projection of them; only the output differs.",
+      "merge": {
+        "suggested_name": "pyextract",
+        "strategy": "Output target is a flag; docs become one of the writers.",
+        "cli_example": "pyextract --what docs --format md src/ ; pyextract --what defs --format sqlite src/",
+        "flags": [
+          {
+            "flag": "--what",
+            "values": [
+              "defs",
+              "classes",
+              "constants",
+              "docs",
+              "imports"
+            ],
+            "replaces": "pyextract entity kinds + pydocr"
+          },
+          {
+            "flag": "--format",
+            "values": [
+              "files",
+              "md",
+              "json",
+              "sqlite"
+            ],
+            "replaces": "pyextract writers + pydocr markdown writer"
+          },
+          {
+            "flag": "--engine",
+            "values": [
+              "ast",
+              "libcst",
+              "tree-sitter"
+            ],
+            "replaces": "three extractors already present"
+          }
+        ],
+        "remove_files": [
+          "pydocr.py"
+        ],
+        "effort": "M",
+        "risks": [
+          "docstring formatting is opinionated; keep the md template configurable"
+        ],
+        "payoff": "2 → 1"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pydocr.py",
+          "right": "pyextract.py",
+          "shingles": 0.0032,
+          "tokens": 0.095,
+          "definitions": 0.0164,
+          "imports": 0.2308,
+          "flags": 0.0,
+          "score": 0.0626
+        },
+        "pairs": [
+          {
+            "left": "pydocr.py",
+            "right": "pyextract.py",
+            "shingles": 0.0032,
+            "tokens": 0.095,
+            "definitions": 0.0164,
+            "imports": 0.2308,
+            "flags": 0.0,
+            "score": 0.0626
+          }
+        ],
+        "interpretation": "best measured pair 0.06: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "web-docs",
+      "title": "Web / Markdown asset handling",
+      "task": "Fetch, inline or validate web and Markdown assets",
+      "kind": "category",
+      "confidence": "medium",
+      "scripts": [
+        {
+          "path": "pymonolith.py",
+          "role": "inline CSS/JS/images into one HTML file",
+          "verdict": "keep",
+          "purpose": "Save a page as one HTML file with CSS/JS/images inlined."
+        },
+        {
+          "path": "pylychee.py",
+          "role": "check and fix Markdown/HTML image links",
+          "verdict": "keep",
+          "purpose": "Check and fix Markdown / HTML image links."
+        }
+      ],
+      "why": "Both resolve URLs against a base document and rewrite asset references — the shared piece is URL resolution and content-type guessing, not the CLI.",
+      "merge": {
+        "suggested_name": null,
+        "strategy": "Keep separate; extract the shared URL/mime helpers into one module.",
+        "cli_example": null,
+        "flags": [],
+        "remove_files": [],
+        "effort": "S",
+        "risks": [
+          "premature CLI merge would bloat both tools"
+        ],
+        "payoff": "shared helper only (~60 lines deduplicated)"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pylychee.py",
+          "right": "pymonolith.py",
+          "shingles": 0.007,
+          "tokens": 0.2,
+          "definitions": 0.027,
+          "imports": 0.5,
+          "flags": 0.0769,
+          "score": 0.1402
+        },
+        "pairs": [
+          {
+            "left": "pylychee.py",
+            "right": "pymonolith.py",
+            "shingles": 0.007,
+            "tokens": 0.2,
+            "definitions": 0.027,
+            "imports": 0.5,
+            "flags": 0.0769,
+            "score": 0.1402
+          }
+        ],
+        "interpretation": "best measured pair 0.14: low by design, these use different libraries and identifier names for the same job; the grouping is semantic, not textual"
+      }
+    },
+    {
+      "id": "tui-shared",
+      "title": "Shared terminal-UI code",
+      "task": "Cross-cutting: raw-mode key handling, terminal sizing and ANSI rendering",
+      "kind": "shared-library",
+      "confidence": "high",
+      "overlaps": true,
+      "scripts": [
+        {
+          "path": "pfzf.py",
+          "role": "key decoding + preview pane",
+          "verdict": "keep",
+          "backends": [
+            "termios",
+            "tty",
+            "select"
+          ],
+          "purpose": "Interactive fuzzy finder (fzf-like) over stdin lines with a preview pane."
+        },
+        {
+          "path": "pygdu.py",
+          "role": "disk-usage browser",
+          "verdict": "keep",
+          "backends": [
+            "termios",
+            "tty"
+          ],
+          "purpose": "Interactive disk-usage browser (TUI)."
+        },
+        {
+          "path": "pyrgb.py",
+          "role": "colour chart",
+          "verdict": "keep",
+          "backends": [
+            "termios",
+            "tty",
+            "select"
+          ],
+          "purpose": "Interactive RGB colour chart for the terminal."
+        },
+        {
+          "path": "pdfv.py",
+          "role": "PDF text viewer",
+          "verdict": "keep",
+          "backends": [
+            "termios",
+            "tty"
+          ],
+          "purpose": "Terminal text viewer for PDFs (PyMuPDF extraction, scroll, goto page)."
+        },
+        {
+          "path": "pdfv2.py",
+          "role": "PDF image viewer",
+          "verdict": "keep",
+          "backends": [
+            "termios",
+            "tty",
+            "select"
+          ],
+          "purpose": "Terminal PDF viewer that renders pages as images (PPM)."
+        },
+        {
+          "path": "pdfviewer.py",
+          "role": "PDF image viewer",
+          "verdict": "keep",
+          "backends": [
+            "termios",
+            "tty"
+          ],
+          "purpose": "Terminal PDF viewer that renders pages at a zoom level."
+        },
+        {
+          "path": "pycatimg.py",
+          "role": "image renderer",
+          "verdict": "keep",
+          "purpose": "Display images, including SVG, in the terminal in true colour."
+        },
+        {
+          "path": "pychafa.py",
+          "role": "image renderer",
+          "verdict": "keep",
+          "purpose": "Display an image in the terminal with block characters."
+        }
+      ],
+      "why": "Eight scripts each hand-roll the same raw-mode key loop and terminal-size probe; the escape sequences are duplicated in at least four of them.",
+      "merge": {
+        "suggested_name": "tui.py (shared module)",
+        "strategy": "Do NOT merge CLIs; extract keys/term/ansi into a common module.",
+        "cli_example": null,
+        "flags": [],
+        "remove_files": [],
+        "effort": "M",
+        "risks": [
+          "vendoring a module couples scripts that are currently standalone"
+        ],
+        "payoff": "~200 duplicated lines removed; one place to fix key decoding"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pdfv2.py",
+          "right": "pdfviewer.py",
+          "shingles": 0.3405,
+          "tokens": 0.5811,
+          "definitions": 0.5862,
+          "imports": 0.5333,
+          "flags": 0.3333,
+          "score": 0.478
+        },
+        "pairs": [
+          {
+            "left": "pdfv2.py",
+            "right": "pdfviewer.py",
+            "shingles": 0.3405,
+            "tokens": 0.5811,
+            "definitions": 0.5862,
+            "imports": 0.5333,
+            "flags": 0.3333,
+            "score": 0.478
+          },
+          {
+            "left": "pdfv.py",
+            "right": "pdfviewer.py",
+            "shingles": 0.138,
+            "tokens": 0.4912,
+            "definitions": 0.3571,
+            "imports": 0.6923,
+            "flags": 0.5,
+            "score": 0.3895
+          },
+          {
+            "left": "pdfv.py",
+            "right": "pdfv2.py",
+            "shingles": 0.1396,
+            "tokens": 0.3864,
+            "definitions": 0.3714,
+            "imports": 0.6429,
+            "flags": 0.1667,
+            "score": 0.3259
+          },
+          {
+            "left": "pfzf.py",
+            "right": "pyrgb.py",
+            "shingles": 0.0144,
+            "tokens": 0.1713,
+            "definitions": 0.1304,
+            "imports": 0.875,
+            "flags": 0.0,
+            "score": 0.2045
+          },
+          {
+            "left": "pdfviewer.py",
+            "right": "pyrgb.py",
+            "shingles": 0.0082,
+            "tokens": 0.2234,
+            "definitions": 0.1071,
+            "imports": 0.5,
+            "flags": 0.0,
+            "score": 0.1547
+          },
+          {
+            "left": "pdfv.py",
+            "right": "pyrgb.py",
+            "shingles": 0.0094,
+            "tokens": 0.2414,
+            "definitions": 0.0645,
+            "imports": 0.5,
+            "flags": 0.0,
+            "score": 0.1511
+          }
+        ],
+        "interpretation": "best measured pair 0.48: members duplicate key/TUI code, which is what the shared module should absorb (their CLIs stay separate)"
+      }
+    },
+    {
+      "id": "linter-wrappers",
+      "title": "External linter wrappers",
+      "task": "Cross-cutting: run a linter over a file set in parallel",
+      "kind": "shared-library",
+      "confidence": "medium",
+      "scripts": [
+        {
+          "path": "pyruf.py",
+          "role": "ruff wrapper incl. extensionless scripts",
+          "verdict": "keep",
+          "purpose": "Run ruff, including on extensionless Python scripts."
+        },
+        {
+          "path": "pycppcheck.py",
+          "role": "clang -fsyntax-only wrapper",
+          "verdict": "keep",
+          "backends": [
+            "clang"
+          ],
+          "purpose": "Syntax-check C/C++ files with clang in parallel."
+        }
+      ],
+      "why": "Same shape: collect files by extension, run a binary, map output back to files.",
+      "merge": {
+        "suggested_name": null,
+        "strategy": "Keep separate; share the file-collection + process-pool helper.",
+        "cli_example": null,
+        "flags": [],
+        "remove_files": [],
+        "effort": "S",
+        "risks": [],
+        "payoff": "small; only worth it if a third linter wrapper appears"
+      },
+      "evidence": {
+        "best_pair": {
+          "left": "pycppcheck.py",
+          "right": "pyruf.py",
+          "shingles": 0.0037,
+          "tokens": 0.1325,
+          "definitions": 0.0,
+          "imports": 0.375,
+          "flags": 0.0,
+          "score": 0.0905
+        },
+        "pairs": [
+          {
+            "left": "pycppcheck.py",
+            "right": "pyruf.py",
+            "shingles": 0.0037,
+            "tokens": 0.1325,
+            "definitions": 0.0,
+            "imports": 0.375,
+            "flags": 0.0,
+            "score": 0.0905
+          }
+        ],
+        "interpretation": "best measured pair 0.09: members duplicate key/TUI code, which is what the shared module should absorb (their CLIs stay separate)"
+      }
+    }
+  ],
+  "standalone": [
+    {
+      "path": "plotter.py",
+      "why": "Standalone matplotlib plotting utility; nothing else plots functions.",
+      "purpose": "Plot a math function with matplotlib."
+    },
+    {
+      "path": "pyhead.py",
+      "why": "10-line head(1) helper; too small to absorb, could become `pyfslint --head`.",
+      "purpose": "Print the first 1 KiB of a file."
+    },
+    {
+      "path": "pysplit.py",
+      "why": "Standalone split(1); nothing else slices one file into N parts.",
+      "purpose": "Split a text file into N line-balanced parts."
+    },
+    {
+      "path": "pyqalc.py",
+      "why": "Standalone calculator; no overlap in the set.",
+      "purpose": "Command-line calculator with unit conversion."
+    },
+    {
+      "path": "pyjcal.py",
+      "why": "Standalone Jalali calendar; no overlap in the set.",
+      "purpose": "Jalali (Persian) calendar CLI and date converter."
+    },
+    {
+      "path": "pyshuf.py",
+      "why": "Standalone line shuffler with its own RNG strategies.",
+      "purpose": "Shuffle the lines of a file (crypto / weighted / mmap strategies)."
+    },
+    {
+      "path": "pytokei.py",
+      "why": "Standalone LOC counter; overlaps only conceptually with pydup.",
+      "purpose": "Count lines of code, comments and blanks by language."
+    },
+    {
+      "path": "pyrun.py",
+      "why": "Standalone test/script runner with a summary table.",
+      "purpose": "Run every .py under a directory and summarise outcomes."
+    },
+    {
+      "path": "pyocr.py",
+      "why": "Standalone OCR binding port; no other OCR script.",
+      "purpose": "OCR CLI over tesseract/cuneiform (pyocr library port)."
+    },
+    {
+      "path": "pyxsrt.py",
+      "why": "Standalone subtitle extractor (ffmpeg/ffprobe).",
+      "purpose": "Extract embedded subtitle streams from video with ffmpeg/ffprobe."
+    },
+    {
+      "path": "pycurl_downloader.py",
+      "why": "Generic URL-list downloader; could fold into pypidl as --url-list.",
+      "purpose": "Download URLs from a list with pycurl, retries and resume."
+    },
+    {
+      "path": "pygdu.py",
+      "why": "Standalone disk-usage TUI (see tui-shared for the shared code).",
+      "purpose": "Interactive disk-usage browser (TUI)."
+    },
+    {
+      "path": "pkgfetch.py",
+      "why": "PEP 503/691 index client used as a library; could become pkgtool's resolver.",
+      "purpose": "Find and download distributions from PEP 503 / 691 indexes."
+    },
+    {
+      "path": "prompt-reformatter.py",
+      "why": "Text reflow; could become `pyfmt --wrap 80`.",
+      "purpose": "Reflow prompt/text files to 80 columns, fixing list spacing."
+    },
+    {
+      "path": "py7zmax.py",
+      "why": "Excluded from the rewrite; the only archiver.",
+      "purpose": "Compress files/directories to .7z (excluded from the rewrite)."
+    }
+  ],
+  "index": {
+    "pathcmd.py": {
+      "purpose": "Print every PATH entry, one per line.",
+      "group": "path-tools",
+      "group_title": "PATH inspection",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 17,
+      "third_party": []
+    },
+    "pathdiag.py": {
+      "purpose": "Diagnose PATH: duplicates, shadowed binaries, alias/function collisions, optional rc rewrite.",
+      "group": "path-tools",
+      "group_title": "PATH inspection",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 188,
+      "third_party": []
+    },
+    "pbat.py": {
+      "purpose": "bat-style file viewer: syntax highlighting, line ranges, paging.",
+      "group": "bat-clone",
+      "group_title": "bat-style file viewer",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 370,
+      "third_party": [
+        "pygments"
+      ]
+    },
+    "pdf2img.py": {
+      "purpose": "Render PDF pages to JPG with PyMuPDF.",
+      "group": "pdf-render",
+      "group_title": "PDF → raster images",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 73,
+      "third_party": [
+        "pymupdf"
+      ]
+    },
+    "pdf2page.py": {
+      "purpose": "Extract every PDF page to its own .txt with the first of five available backends.",
+      "group": "pdf-text",
+      "group_title": "PDF → text extraction",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 383,
+      "third_party": [
+        "PyPDF2",
+        "fitz",
+        "pdfminer",
+        "pdfplumber",
+        "pypdf"
+      ]
+    },
+    "pdf2png.py": {
+      "purpose": "Render PDF pages to PNG via pdftoppm.",
+      "group": "pdf-render",
+      "group_title": "PDF → raster images",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 56,
+      "third_party": []
+    },
+    "pdf2text.py": {
+      "purpose": "Extract PDF text, concatenated or split per page (PyPDF2 / pdfplumber).",
+      "group": "pdf-text",
+      "group_title": "PDF → text extraction",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 176,
+      "third_party": [
+        "PyPDF2",
+        "pdfplumber"
+      ]
+    },
+    "pdftools.py": {
+      "purpose": "PDF utility suite on PyMuPDF: text, per-page split, merge, image/font/attachment extraction.",
+      "group": "pdf-toolkit",
+      "group_title": "PDF manipulation toolkits",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 296,
+      "third_party": [
+        "pymupdf"
+      ]
+    },
+    "pdftools2.py": {
+      "purpose": "Unified PDF toolkit: outline, merge, to-image, rename pages, shrink, split by size.",
+      "group": "pdf-toolkit",
+      "group_title": "PDF manipulation toolkits",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 656,
+      "third_party": [
+        "lxml",
+        "pdf2image",
+        "pdfplumber",
+        "pypdf"
+      ]
+    },
+    "pdftoolz.py": {
+      "purpose": "Unified PDF toolkit, PyMuPDF-only sibling of pdftools2.py.",
+      "group": "pdf-toolkit",
+      "group_title": "PDF manipulation toolkits",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 681,
+      "third_party": [
+        "pymupdf"
+      ]
+    },
+    "pdftotext.py": {
+      "purpose": "Extract text from PDFs with backend fallback (fitz / pdfminer / pdfplumber / pypdf).",
+      "group": "pdf-text",
+      "group_title": "PDF → text extraction",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 107,
+      "third_party": [
+        "fitz",
+        "pdfminer",
+        "pdfplumber",
+        "pypdf"
+      ]
+    },
+    "pdfv.py": {
+      "purpose": "Terminal text viewer for PDFs (PyMuPDF extraction, scroll, goto page).",
+      "group": "pdf-viewer",
+      "group_title": "Terminal PDF viewers",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 295,
+      "third_party": [
+        "pymupdf",
+        "readchar"
+      ]
+    },
+    "pdfv2.py": {
+      "purpose": "Terminal PDF viewer that renders pages as images (PPM).",
+      "group": "pdf-viewer",
+      "group_title": "Terminal PDF viewers",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 456,
+      "third_party": []
+    },
+    "pdfview.py": {
+      "purpose": "Scrollable terminal pager for PDF text with backend autodetection.",
+      "group": "pdf-viewer",
+      "group_title": "Terminal PDF viewers",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 515,
+      "third_party": [
+        "fitz",
+        "loguru",
+        "pdfminer",
+        "pypdf"
+      ]
+    },
+    "pdfviewer.py": {
+      "purpose": "Terminal PDF viewer that renders pages at a zoom level.",
+      "group": "pdf-viewer",
+      "group_title": "Terminal PDF viewers",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 300,
+      "third_party": [
+        "fitz",
+        "pymupdf"
+      ]
+    },
+    "pdif.py": {
+      "purpose": "Naive line-by-line file comparison based on line membership.",
+      "group": "file-diff",
+      "group_title": "File comparison / diffing",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 51,
+      "third_party": []
+    },
+    "pdiff.py": {
+      "purpose": "Diff two Python files by AST / bytecode instead of text.",
+      "group": "file-diff",
+      "group_title": "File comparison / diffing",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 115,
+      "third_party": [
+        "opcode"
+      ]
+    },
+    "perpage.py": {
+      "purpose": "Split PDFs into single pages and extract text per page in a process pool.",
+      "group": "pdf-text",
+      "group_title": "PDF → text extraction",
+      "verdict": "merge",
+      "excluded_from_rewrite": false,
+      "lines": 150,
+      "third_party": [
+        "loguru",
+        "pypdf"
+      ]
+    },
+    "pfzf.py": {
+      "purpose": "Interactive fuzzy finder (fzf-like) over stdin lines with a preview pane.",
+      "group": "file-search",
+      "group_title": "Recursive file / content search",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 404,
+      "third_party": []
+    },
+    "pip_downloader.py": {
+      "purpose": "Download a package's sdist/wheel from PyPI.",
+      "group": "pypi-download",
+      "group_title": "Download packages from PyPI / mirrors",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 65,
+      "third_party": [
+        "httpx"
+      ]
+    },
+    "pip_reinstaller.py": {
+      "purpose": "Reinstall pure-Python packages, or packages listed in a file.",
+      "group": "pip-ops",
+      "group_title": "pip install/uninstall operations",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 109,
+      "third_party": [
+        "pip"
+      ]
+    },
+    "pip_sanity_check.py": {
+      "purpose": "Sanity-check installed packages (import + metadata).",
+      "group": "pypi-health",
+      "group_title": "Installed-package health checks",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 77,
+      "third_party": [
+        "dh"
+      ]
+    },
+    "pipget.py": {
+      "purpose": "Download sdists / pure wheels from a PyPI mirror with archive validation.",
+      "group": "pypi-download",
+      "group_title": "Download packages from PyPI / mirrors",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 571,
+      "third_party": [
+        "asyncio",
+        "bs4",
+        "dh",
+        "httpx"
+      ]
+    },
+    "piu.py": {
+      "purpose": "Uninstall installed packages, with wildcard matching.",
+      "group": "pip-ops",
+      "group_title": "pip install/uninstall operations",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 51,
+      "third_party": [
+        "pip"
+      ]
+    },
+    "pkg_insoector.py": {
+      "purpose": "Inspect site-packages: duplicate dists, multi-version installs, missing console scripts.",
+      "group": "installed-inspection",
+      "group_title": "Inspect installed distributions",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 882,
+      "third_party": []
+    },
+    "pkg_tools.py": {
+      "purpose": "apt + pip + wheel package-management toolkit (install, clean, du).",
+      "group": "pkg-maintenance",
+      "group_title": "Package / site-packages maintenance",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 947,
+      "third_party": [
+        "importlib_metadata",
+        "packaging",
+        "pip",
+        "rapidfuzz"
+      ]
+    },
+    "pkgfetch.py": {
+      "purpose": "Find and download distributions from PEP 503 / 691 indexes.",
+      "group": null,
+      "group_title": null,
+      "verdict": "standalone",
+      "excluded_from_rewrite": false,
+      "lines": 864,
+      "third_party": [
+        "httpx",
+        "loguru",
+        "packaging",
+        "pycurl",
+        "requests"
+      ]
+    },
+    "pkgres.py": {
+      "purpose": "Detect and autofix deprecated pkg_resources usage.",
+      "group": "installed-inspection",
+      "group_title": "Inspect installed distributions",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 224,
+      "third_party": []
+    },
+    "pkgtools.py": {
+      "purpose": "Copy, move and repack installed distributions.",
+      "group": "pkg-maintenance",
+      "group_title": "Package / site-packages maintenance",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 644,
+      "third_party": [
+        "packaging"
+      ]
+    },
+    "pkgtools2.py": {
+      "purpose": "Debian/Termux package and system-bin toolkit.",
+      "group": "pkg-maintenance",
+      "group_title": "Package / site-packages maintenance",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 940,
+      "third_party": [
+        "apt",
+        "loguru"
+      ]
+    },
+    "pkl2json.py": {
+      "purpose": "Convert a pickle file to JSON.",
+      "group": "pickle-json",
+      "group_title": "Pickle → JSON conversion",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 59,
+      "third_party": [
+        "pandas"
+      ]
+    },
+    "pklr.py": {
+      "purpose": "Pickle processor: JSON conversion, raw dump, sanitising.",
+      "group": "pickle-json",
+      "group_title": "Pickle → JSON conversion",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 122,
+      "third_party": []
+    },
+    "pkltojson.py": {
+      "purpose": "Convert a pickle to JSON with best-effort serialisation.",
+      "group": "pickle-json",
+      "group_title": "Pickle → JSON conversion",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 86,
+      "third_party": []
+    },
+    "plotter.py": {
+      "purpose": "Plot a math function with matplotlib.",
+      "group": null,
+      "group_title": null,
+      "verdict": "standalone",
+      "excluded_from_rewrite": false,
+      "lines": 135,
+      "third_party": [
+        "matplotlib",
+        "numpy"
+      ]
+    },
+    "pngq.py": {
+      "purpose": "Optimise PNGs with pngquant across a file tree.",
+      "group": "optimizers",
+      "group_title": "Asset optimiser wrappers",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 144,
+      "third_party": []
+    },
+    "pnr.py": {
+      "purpose": "Rename files/dirs by removing or replacing strings, or templating numbers.",
+      "group": "file-renamer",
+      "group_title": "File / directory renamers",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 193,
+      "third_party": [
+        "dh"
+      ]
+    },
+    "pnr2.py": {
+      "purpose": "Advanced renamer: regex, template, case/unicode transforms, undo log.",
+      "group": "file-renamer",
+      "group_title": "File / directory renamers",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 375,
+      "third_party": []
+    },
+    "ppage.py": {
+      "purpose": "Early per-page PDF splitter + text extractor (ancestor of perpage.py).",
+      "group": "pdf-text",
+      "group_title": "PDF → text extraction",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 77,
+      "third_party": [
+        "pymupdf"
+      ]
+    },
+    "prefactor.py": {
+      "purpose": "Merge a multi-module package into a single-file module.",
+      "group": "package-merge",
+      "group_title": "Collapse a package into a single module",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 279,
+      "third_party": []
+    },
+    "pret.py": {
+      "purpose": "Run prettier over the given files (minimal wrapper).",
+      "group": "formatting",
+      "group_title": "Formatting and minification",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 43,
+      "third_party": [
+        "dh"
+      ]
+    },
+    "pret2.py": {
+      "purpose": "Run prettier over JS/TS/CSS/HTML/JSON trees with error folder, workers, timeout.",
+      "group": "formatting",
+      "group_title": "Formatting and minification",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 126,
+      "third_party": [
+        "loguru"
+      ]
+    },
+    "prompt-reformatter.py": {
+      "purpose": "Reflow prompt/text files to 80 columns, fixing list spacing.",
+      "group": null,
+      "group_title": null,
+      "verdict": "standalone",
+      "excluded_from_rewrite": false,
+      "lines": 71,
+      "third_party": []
+    },
+    "psearch.py": {
+      "purpose": "Search PyPI packages through the JSON API.",
+      "group": "pypi-search",
+      "group_title": "Search PyPI packages",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 96,
+      "third_party": [
+        "requests"
+      ]
+    },
+    "pss.py": {
+      "purpose": "Substring search over a local PyPI package index (SQLite FTS5 trigram).",
+      "group": "pypi-search",
+      "group_title": "Search PyPI packages",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 106,
+      "third_party": []
+    },
+    "purepy.py": {
+      "purpose": "Classify installed packages as pure-Python vs native-wheel using PyPI metadata.",
+      "group": "installed-inspection",
+      "group_title": "Inspect installed distributions",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 136,
+      "third_party": [
+        "loguru",
+        "requests"
+      ]
+    },
+    "py2ipynb.py": {
+      "purpose": "Convert a Python script to a notebook, splitting at cell markers.",
+      "group": "notebook-convert",
+      "group_title": "Python script → Jupyter notebook",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 84,
+      "third_party": [
+        "nbformat"
+      ]
+    },
+    "py3migrate.py": {
+      "purpose": "Python 2→3 toolbox: detect, lib2to3 refactor, fix print, strip tags.",
+      "group": "python-modernize",
+      "group_title": "Python 2 → 3 / source modernisation",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 755,
+      "third_party": [
+        "lib2to3"
+      ]
+    },
+    "py7zmax.py": {
+      "purpose": "Compress files/directories to .7z (excluded from the rewrite).",
+      "group": null,
+      "group_title": null,
+      "verdict": "standalone",
+      "excluded_from_rewrite": true,
+      "lines": 41,
+      "third_party": [
+        "py7zr"
+      ]
+    },
+    "py_clean.py": {
+      "purpose": "Strip comments, docstrings and type hints with LibCST; parallel, gitignore-aware.",
+      "group": "python-source-cleanup",
+      "group_title": "Python source stripping / cleanup",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 838,
+      "third_party": [
+        "libcst",
+        "loguru"
+      ]
+    },
+    "py_refact.py": {
+      "purpose": "Merge a package into one modernised module (six/py2, os.path, logging rewrites).",
+      "group": "package-merge",
+      "group_title": "Collapse a package into a single module",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 471,
+      "third_party": []
+    },
+    "py_refactor.py": {
+      "purpose": "Refactor a small package: merge modules, build __all__, keep backups.",
+      "group": "package-merge",
+      "group_title": "Collapse a package into a single module",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 644,
+      "third_party": []
+    },
+    "pybat.py": {
+      "purpose": "Identical sibling of pbat.py (bat clone).",
+      "group": "bat-clone",
+      "group_title": "bat-style file viewer",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 379,
+      "third_party": [
+        "pygments"
+      ]
+    },
+    "pycatimg.py": {
+      "purpose": "Display images, including SVG, in the terminal in true colour.",
+      "group": "image-terminal",
+      "group_title": "Images in the terminal",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 193,
+      "third_party": [
+        "PIL",
+        "cairosvg"
+      ]
+    },
+    "pychafa.py": {
+      "purpose": "Display an image in the terminal with block characters.",
+      "group": "image-terminal",
+      "group_title": "Images in the terminal",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 62,
+      "third_party": [
+        "PIL"
+      ]
+    },
+    "pyclean.py": {
+      "purpose": "Unified source cleaner: strip docstrings/comments (AST, libcst, tokenize) and check.",
+      "group": "python-source-cleanup",
+      "group_title": "Python source stripping / cleanup",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 735,
+      "third_party": [
+        "libcst"
+      ]
+    },
+    "pycleaner.py": {
+      "purpose": "Report and autofix unused imports and unused definitions.",
+      "group": "python-source-cleanup",
+      "group_title": "Python source stripping / cleanup",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 1257,
+      "third_party": [
+        "zstandard"
+      ]
+    },
+    "pyco.py": {
+      "purpose": "Remove __pycache__ directories and report freed space.",
+      "group": "pkg-maintenance",
+      "group_title": "Package / site-packages maintenance",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 32,
+      "third_party": [
+        "dh"
+      ]
+    },
+    "pycppcheck.py": {
+      "purpose": "Syntax-check C/C++ files with clang in parallel.",
+      "group": "linter-wrappers",
+      "group_title": "External linter wrappers",
+      "verdict": "keep",
+      "excluded_from_rewrite": false,
+      "lines": 54,
+      "third_party": [
+        "dh"
+      ]
+    },
+    "pycurl_downloader.py": {
+      "purpose": "Download URLs from a list with pycurl, retries and resume.",
+      "group": null,
+      "group_title": null,
+      "verdict": "standalone",
+      "excluded_from_rewrite": false,
+      "lines": 161,
+      "third_party": [
+        "pycurl"
+      ]
+    },
+    "pydeduper.py": {
+      "purpose": "Find duplicate top-level definitions and extract them into a utils module.",
+      "group": "duplicate-detection",
+      "group_title": "Duplicate / similarity detection for Python code",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 787,
+      "third_party": [
+        "brotli",
+        "brotlicffi",
+        "loguru",
+        "zstandard"
+      ]
+    },
+    "pydevtools.py": {
+      "purpose": "Scaffold and package Python or Rust projects (pyproject, cargo).",
+      "group": "scaffolding",
+      "group_title": "Project scaffolding",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 1048,
+      "third_party": [
+        "tomli"
+      ]
+    },
+    "pydiff.py": {
+      "purpose": "Line diff that hashes/groups differing files and can move them.",
+      "group": "file-diff",
+      "group_title": "File comparison / diffing",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 135,
+      "third_party": [
+        "dh"
+      ]
+    },
+    "pydocr.py": {
+      "purpose": "Extract docstrings and AST docs from modules into Markdown.",
+      "group": "ast-extraction",
+      "group_title": "Python source extraction",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 158,
+      "third_party": [
+        "dh"
+      ]
+    },
+    "pydos2unix.py": {
+      "purpose": "Convert CRLF to LF across a tree (dos2unix wrapper).",
+      "group": "text-hygiene",
+      "group_title": "Text-file hygiene (line endings, BOM, final newline)",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 136,
+      "third_party": [
+        "dh",
+        "dos2unix",
+        "loguru"
+      ]
+    },
+    "pydos2unix2.py": {
+      "purpose": "Fast CRLF→LF converter with mmap, worker pool and error log.",
+      "group": "text-hygiene",
+      "group_title": "Text-file hygiene (line endings, BOM, final newline)",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 144,
+      "third_party": [
+        "tqdm"
+      ]
+    },
+    "pydup.py": {
+      "purpose": "Find duplicate Python files, definitions and near-duplicates (token, tlsh, ssdeep).",
+      "group": "duplicate-detection",
+      "group_title": "Duplicate / similarity detection for Python code",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 2924,
+      "third_party": [
+        "joblib",
+        "pathspec",
+        "rich",
+        "send2trash",
+        "ssdeep",
+        "tlsh",
+        "tomli",
+        "watchdog",
+        "xxhash"
+      ]
+    },
+    "pyenhance.py": {
+      "purpose": "Fix invalid escapes, bytes literals and `is` comparisons in Python source.",
+      "group": "python-modernize",
+      "group_title": "Python 2 → 3 / source modernisation",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 562,
+      "third_party": [
+        "loguru"
+      ]
+    },
+    "pyextract.py": {
+      "purpose": "Extract functions/classes/constants from files, archives or trees (AST/libcst/sqlite).",
+      "group": "ast-extraction",
+      "group_title": "Python source extraction",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 1023,
+      "third_party": [
+        "libcst",
+        "tree_sitter",
+        "tree_sitter_python",
+        "zstandard"
+      ]
+    },
+    "pyfmt.py": {
+      "purpose": "Unified HTML/CSS/JS/JSON formatter and linter glue.",
+      "group": "formatting",
+      "group_title": "Formatting and minification",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 573,
+      "third_party": [
+        "bs4",
+        "cssbeautifier",
+        "jsbeautifier",
+        "tqdm",
+        "tree_sitter",
+        "tree_sitter_html",
+        "yapf"
+      ]
+    },
+    "pyfslint.py": {
+      "purpose": "Lint text files for CRLF, BOM, missing final newline and binary content.",
+      "group": "text-hygiene",
+      "group_title": "Text-file hygiene (line endings, BOM, final newline)",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 500,
+      "third_party": []
+    },
+    "pygdu.py": {
+      "purpose": "Interactive disk-usage browser (TUI).",
+      "group": null,
+      "group_title": null,
+      "verdict": "standalone",
+      "excluded_from_rewrite": false,
+      "lines": 181,
+      "third_party": [
+        "dh",
+        "loguru"
+      ]
+    },
+    "pyget.py": {
+      "purpose": "pip-style download manager with progress bars and pluggable backends.",
+      "group": "pypi-download",
+      "group_title": "Download packages from PyPI / mirrors",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 709,
+      "third_party": [
+        "pycurl",
+        "requests"
+      ]
+    },
+    "pyhead.py": {
+      "purpose": "Print the first 1 KiB of a file.",
+      "group": null,
+      "group_title": null,
+      "verdict": "standalone",
+      "excluded_from_rewrite": false,
+      "lines": 21,
+      "third_party": []
+    },
+    "pyjcal.py": {
+      "purpose": "Jalali (Persian) calendar CLI and date converter.",
+      "group": null,
+      "group_title": null,
+      "verdict": "standalone",
+      "excluded_from_rewrite": false,
+      "lines": 382,
+      "third_party": []
+    },
+    "pylychee.py": {
+      "purpose": "Check and fix Markdown / HTML image links.",
+      "group": "web-docs",
+      "group_title": "Web / Markdown asset handling",
+      "verdict": "keep",
+      "excluded_from_rewrite": false,
+      "lines": 256,
+      "third_party": [
+        "loguru"
+      ]
+    },
+    "pymonolith.py": {
+      "purpose": "Save a page as one HTML file with CSS/JS/images inlined.",
+      "group": "web-docs",
+      "group_title": "Web / Markdown asset handling",
+      "verdict": "keep",
+      "excluded_from_rewrite": false,
+      "lines": 338,
+      "third_party": [
+        "bs4",
+        "requests"
+      ]
+    },
+    "pyocr.py": {
+      "purpose": "OCR CLI over tesseract/cuneiform (pyocr library port).",
+      "group": null,
+      "group_title": null,
+      "verdict": "standalone",
+      "excluded_from_rewrite": false,
+      "lines": 1728,
+      "third_party": [
+        "PIL"
+      ]
+    },
+    "pypi_stats.py": {
+      "purpose": "CLI for pypistats.org download statistics (subcommands, cache, formats).",
+      "group": "pypi-stats",
+      "group_title": "PyPI download statistics",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 731,
+      "third_party": [
+        "numpy",
+        "pandas",
+        "platformdirs",
+        "prettytable",
+        "slugify",
+        "termcolor",
+        "tomli",
+        "urllib3"
+      ]
+    },
+    "pypi_update_check.py": {
+      "purpose": "Check installed packages for available updates with state caching.",
+      "group": "pypi-health",
+      "group_title": "Installed-package health checks",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 480,
+      "third_party": [
+        "packaging",
+        "pycurl",
+        "requests"
+      ]
+    },
+    "pypi_user_pkgs.py": {
+      "purpose": "List and download every package published by a PyPI user or org.",
+      "group": "pypi-download",
+      "group_title": "Download packages from PyPI / mirrors",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 552,
+      "third_party": [
+        "asyncio",
+        "httpx",
+        "pycurl",
+        "requests"
+      ]
+    },
+    "pypidl.py": {
+      "purpose": "Unified PyPI downloader: mirrors, wheel scoring, hash verification.",
+      "group": "pypi-download",
+      "group_title": "Download packages from PyPI / mirrors",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 920,
+      "third_party": [
+        "bs4",
+        "pycurl",
+        "requests",
+        "rich"
+      ]
+    },
+    "pypistats.py": {
+      "purpose": "Fetch and aggregate pypistats.org statistics (helper layer).",
+      "group": "pypi-stats",
+      "group_title": "PyPI download statistics",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 78,
+      "third_party": []
+    },
+    "pyproj.py": {
+      "purpose": "Scaffold a new Python project and create/push its GitHub repository.",
+      "group": "scaffolding",
+      "group_title": "Project scaffolding",
+      "verdict": "merge",
+      "excluded_from_rewrite": false,
+      "lines": 283,
+      "third_party": [
+        "dotenv"
+      ]
+    },
+    "pyqalc.py": {
+      "purpose": "Command-line calculator with unit conversion.",
+      "group": null,
+      "group_title": null,
+      "verdict": "standalone",
+      "excluded_from_rewrite": false,
+      "lines": 313,
+      "third_party": []
+    },
+    "pyrg.py": {
+      "purpose": "ripgrep-like recursive search with type presets and glob filters.",
+      "group": "file-search",
+      "group_title": "Recursive file / content search",
+      "verdict": "merge-target",
+      "excluded_from_rewrite": false,
+      "lines": 1038,
+      "third_party": [
+        "dh",
+        "loguru"
+      ]
+    },
+    "pyrgb.py": {
+      "purpose": "Interactive RGB colour chart for the terminal.",
+      "group": "image-terminal",
+      "group_title": "Images in the terminal",
+      "verdict": "keep",
+      "excluded_from_rewrite": false,
+      "lines": 251,
+      "third_party": []
+    },
+    "pyruf.py": {
+      "purpose": "Run ruff, including on extensionless Python scripts.",
+      "group": "linter-wrappers",
+      "group_title": "External linter wrappers",
+      "verdict": "keep",
+      "excluded_from_rewrite": false,
+      "lines": 81,
+      "third_party": []
+    },
+    "pyrun.py": {
+      "purpose": "Run every .py under a directory and summarise outcomes.",
+      "group": null,
+      "group_title": null,
+      "verdict": "standalone",
+      "excluded_from_rewrite": false,
+      "lines": 211,
+      "third_party": [
+        "loguru"
+      ]
+    },
+    "pysanity-check.py": {
+      "purpose": "Check that installed packages import and report latest versions.",
+      "group": "pypi-health",
+      "group_title": "Installed-package health checks",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 88,
+      "third_party": [
+        "importlib_metadata"
+      ]
+    },
+    "pysearch.py": {
+      "purpose": "File/content search toolkit (grep/ls/hex/info) — excluded from the rewrite.",
+      "group": "file-search",
+      "group_title": "Recursive file / content search",
+      "verdict": "merge",
+      "excluded_from_rewrite": true,
+      "lines": 686,
+      "third_party": [
+        "brotli",
+        "keyboard",
+        "py7zr",
+        "zstandard"
+      ]
+    },
+    "pyshuf.py": {
+      "purpose": "Shuffle the lines of a file (crypto / weighted / mmap strategies).",
+      "group": null,
+      "group_title": null,
+      "verdict": "standalone",
+      "excluded_from_rewrite": false,
+      "lines": 168,
+      "third_party": []
+    },
+    "pysim.py": {
+      "purpose": "Structural similarity of top-level definitions via AST hashes.",
+      "group": "duplicate-detection",
+      "group_title": "Duplicate / similarity detection for Python code",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 113,
+      "third_party": []
+    },
+    "pysplit.py": {
+      "purpose": "Split a text file into N line-balanced parts.",
+      "group": null,
+      "group_title": null,
+      "verdict": "standalone",
+      "excluded_from_rewrite": false,
+      "lines": 56,
+      "third_party": [
+        "dh"
+      ]
+    },
+    "pysvg.py": {
+      "purpose": "Optimise SVGs with svgo across a file tree.",
+      "group": "optimizers",
+      "group_title": "Asset optimiser wrappers",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 142,
+      "third_party": []
+    },
+    "pyterser.py": {
+      "purpose": "Minify JS/TS with terser.",
+      "group": "formatting",
+      "group_title": "Formatting and minification",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 510,
+      "third_party": []
+    },
+    "python_downloader.py": {
+      "purpose": "pip-style download manager, cwd-only older sibling of pyget.py.",
+      "group": "pypi-download",
+      "group_title": "Download packages from PyPI / mirrors",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 767,
+      "third_party": [
+        "pycurl",
+        "requests"
+      ]
+    },
+    "python_duplicate_finder.py": {
+      "purpose": "Duplicate finder sibling of pydup.py with fewer engines.",
+      "group": "duplicate-detection",
+      "group_title": "Duplicate / similarity detection for Python code",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 2456,
+      "third_party": [
+        "pathspec",
+        "rich",
+        "send2trash",
+        "ssdeep",
+        "tomli",
+        "watchdog",
+        "xxhash"
+      ]
+    },
+    "pytoipynb.py": {
+      "purpose": "Convert a script to a notebook (simple cell splitting).",
+      "group": "notebook-convert",
+      "group_title": "Python script → Jupyter notebook",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 33,
+      "third_party": [
+        "nbformat"
+      ]
+    },
+    "pytokei.py": {
+      "purpose": "Count lines of code, comments and blanks by language.",
+      "group": null,
+      "group_title": null,
+      "verdict": "standalone",
+      "excluded_from_rewrite": false,
+      "lines": 183,
+      "third_party": []
+    },
+    "pyxsrt.py": {
+      "purpose": "Extract embedded subtitle streams from video with ffmpeg/ffprobe.",
+      "group": null,
+      "group_title": null,
+      "verdict": "standalone",
+      "excluded_from_rewrite": false,
+      "lines": 300,
+      "third_party": []
+    },
+    "pyzpkg.py": {
+      "purpose": "Convert installed site-packages directories into zipimport-ready archives.",
+      "group": "pkg-maintenance",
+      "group_title": "Package / site-packages maintenance",
+      "verdict": "delete-after-merge",
+      "excluded_from_rewrite": false,
+      "lines": 128,
+      "third_party": []
+    }
+  },
+  "merge_plan": [
+    {
+      "group": "pypi-health",
+      "suggested_name": "pypi-check",
+      "effort": "S",
+      "removes": [
+        "pip_sanity_check.py",
+        "pysanity-check.py"
+      ],
+      "flags_to_add": [
+        "--mode",
+        "-j, --jobs",
+        "--state",
+        "--json"
+      ],
+      "confidence": "high",
+      "order": 1
+    },
+    {
+      "group": "text-hygiene",
+      "suggested_name": "pyfslint",
+      "effort": "S",
+      "removes": [
+        "pydos2unix.py",
+        "pydos2unix2.py"
+      ],
+      "flags_to_add": [
+        "-b, --backend",
+        "--fix",
+        "-j, --jobs / --error-log",
+        "--check"
+      ],
+      "confidence": "high",
+      "order": 2
+    },
+    {
+      "group": "file-diff",
+      "suggested_name": "pydiff",
+      "effort": "S",
+      "removes": [
+        "pdif.py",
+        "pdiff.py"
+      ],
+      "flags_to_add": [
+        "--mode",
+        "--move-to",
+        "--ignore-whitespace"
+      ],
+      "confidence": "high",
+      "order": 3
+    },
+    {
+      "group": "pickle-json",
+      "suggested_name": "pklr",
+      "effort": "S",
+      "removes": [
+        "pkl2json.py",
+        "pkltojson.py"
+      ],
+      "flags_to_add": [
+        "--format",
+        "--coerce",
+        "-o, --output"
+      ],
+      "confidence": "high",
+      "order": 4
+    },
+    {
+      "group": "pdf-render",
+      "suggested_name": "pdf2img",
+      "effort": "S",
+      "removes": [
+        "pdf2png.py"
+      ],
+      "flags_to_add": [
+        "-b, --backend",
+        "-f, --format",
+        "--dpi",
+        "-o, --output-dir"
+      ],
+      "confidence": "high",
+      "order": 5
+    },
+    {
+      "group": "image-terminal",
+      "suggested_name": "pycatimg",
+      "effort": "S",
+      "removes": [
+        "pychafa.py"
+      ],
+      "flags_to_add": [
+        "-s, --style",
+        "--svg",
+        "--width / --height / --fit",
+        "--demo"
+      ],
+      "confidence": "high",
+      "order": 6
+    },
+    {
+      "group": "pypi-search",
+      "suggested_name": "psearch",
+      "effort": "S",
+      "removes": [
+        "pss.py"
+      ],
+      "flags_to_add": [
+        "--source",
+        "--rebuild-index",
+        "--limit"
+      ],
+      "confidence": "high",
+      "order": 7
+    },
+    {
+      "group": "pypi-stats",
+      "suggested_name": "pypistats",
+      "effort": "S",
+      "removes": [
+        "pypistats.py"
+      ],
+      "flags_to_add": [
+        "--cache-dir",
+        "subcommands"
+      ],
+      "confidence": "high",
+      "order": 8
+    },
+    {
+      "group": "pip-ops",
+      "suggested_name": "pipop",
+      "effort": "S",
+      "removes": [
+        "pip_reinstaller.py"
+      ],
+      "flags_to_add": [
+        "subcommands",
+        "-w, --wildcard",
+        "-l, --list-file",
+        "--pure"
+      ],
+      "confidence": "medium",
+      "order": 9
+    },
+    {
+      "group": "file-renamer",
+      "suggested_name": "pnr",
+      "effort": "S",
+      "removes": [
+        "pnr.py"
+      ],
+      "flags_to_add": [
+        "--remove / --replace",
+        "-t, --template",
+        "--dry-run / --undo"
+      ],
+      "confidence": "high",
+      "order": 10
+    },
+    {
+      "group": "notebook-convert",
+      "suggested_name": "py2ipynb",
+      "effort": "S",
+      "removes": [
+        "pytoipynb.py"
+      ],
+      "flags_to_add": [
+        "--style",
+        "--cell-marker",
+        "-o, --output"
+      ],
+      "confidence": "high",
+      "order": 11
+    },
+    {
+      "group": "optimizers",
+      "suggested_name": "pyopt",
+      "effort": "S",
+      "removes": [
+        "pysvg.py"
+      ],
+      "flags_to_add": [
+        "--type",
+        "--bin",
+        "--jobs / --dry-run"
+      ],
+      "confidence": "high",
+      "order": 12
+    },
+    {
+      "group": "bat-clone",
+      "suggested_name": "pbat",
+      "effort": "S",
+      "removes": [
+        "pybat.py"
+      ],
+      "flags_to_add": [
+        "(none)"
+      ],
+      "confidence": "high",
+      "order": 13
+    },
+    {
+      "group": "path-tools",
+      "suggested_name": "pathdiag",
+      "effort": "S",
+      "removes": [
+        "pathcmd.py"
+      ],
+      "flags_to_add": [
+        "subcommands",
+        "--fix-dedup / --rc-file"
+      ],
+      "confidence": "high",
+      "order": 14
+    },
+    {
+      "group": "pdf-text",
+      "suggested_name": "pdftotext",
+      "effort": "M",
+      "removes": [
+        "pdf2text.py",
+        "pdf2page.py",
+        "ppage.py"
+      ],
+      "flags_to_add": [
+        "-b, --backend",
+        "--mode",
+        "-j, --jobs",
+        "-o, --output-dir",
+        "--pages"
+      ],
+      "confidence": "high",
+      "order": 15
+    },
+    {
+      "group": "pdf-viewer",
+      "suggested_name": "pdfview",
+      "effort": "M",
+      "removes": [
+        "pdfv.py",
+        "pdfv2.py",
+        "pdfviewer.py"
+      ],
+      "flags_to_add": [
+        "--mode",
+        "-b, --backend",
+        "--zoom",
+        "--keys"
+      ],
+      "confidence": "high",
+      "order": 16
+    },
+    {
+      "group": "duplicate-detection",
+      "suggested_name": "pydup",
+      "effort": "M",
+      "removes": [
+        "python_duplicate_finder.py",
+        "pydeduper.py",
+        "pysim.py"
+      ],
+      "flags_to_add": [
+        "--mode",
+        "-e, --engine",
+        "--trash / --json / --cache",
+        "--dedupe-to DIR"
+      ],
+      "confidence": "high",
+      "order": 17
+    },
+    {
+      "group": "formatting",
+      "suggested_name": "pyfmt",
+      "effort": "M",
+      "removes": [
+        "pret.py",
+        "pret2.py",
+        "pyterser.py"
+      ],
+      "flags_to_add": [
+        "-e, --engine",
+        "--minify",
+        "-j, --jobs / --error-dir",
+        "--check / --diff"
+      ],
+      "confidence": "high",
+      "order": 18
+    },
+    {
+      "group": "python-source-cleanup",
+      "suggested_name": "pyclean",
+      "effort": "M",
+      "removes": [
+        "py_clean.py",
+        "pycleaner.py"
+      ],
+      "flags_to_add": [
+        "subcommands",
+        "-e, --engine",
+        "--docstrings / --comments / --type-hints",
+        "-j, --jobs / --workers"
+      ],
+      "confidence": "high",
+      "order": 19
+    },
+    {
+      "group": "installed-inspection",
+      "suggested_name": "pkginspect",
+      "effort": "M",
+      "removes": [
+        "purepy.py",
+        "pkgres.py"
+      ],
+      "flags_to_add": [
+        "subcommands",
+        "--json"
+      ],
+      "confidence": "medium",
+      "order": 20
+    },
+    {
+      "group": "python-modernize",
+      "suggested_name": "py3migrate",
+      "effort": "M",
+      "removes": [
+        "pyenhance.py"
+      ],
+      "flags_to_add": [
+        "--fixer",
+        "--check / --diff"
+      ],
+      "confidence": "medium",
+      "order": 21
+    },
+    {
+      "group": "file-search",
+      "suggested_name": "pyrg",
+      "effort": "M",
+      "removes": [
+        "pfzf.py"
+      ],
+      "flags_to_add": [
+        "-i, --interactive / --fuzzy",
+        "--preview-cmd",
+        "-t, --type / --glob"
+      ],
+      "confidence": "medium",
+      "order": 22
+    },
+    {
+      "group": "scaffolding",
+      "suggested_name": "pyproj",
+      "effort": "M",
+      "removes": [
+        "pydevtools.py"
+      ],
+      "flags_to_add": [
+        "--layout",
+        "--rust / --cargo",
+        "--github",
+        "--publish / --meta"
+      ],
+      "confidence": "high",
+      "order": 23
+    },
+    {
+      "group": "ast-extraction",
+      "suggested_name": "pyextract",
+      "effort": "M",
+      "removes": [
+        "pydocr.py"
+      ],
+      "flags_to_add": [
+        "--what",
+        "--format",
+        "--engine"
+      ],
+      "confidence": "medium",
+      "order": 24
+    },
+    {
+      "group": "pypi-download",
+      "suggested_name": "pypidl",
+      "effort": "L",
+      "removes": [
+        "python_downloader.py",
+        "pyget.py",
+        "pipget.py",
+        "pip_downloader.py",
+        "pypi_user_pkgs.py"
+      ],
+      "flags_to_add": [
+        "-b, --backend",
+        "--mirror",
+        "--users / subcommand user",
+        "--manager / --progress",
+        "--verify-hash"
+      ],
+      "confidence": "high",
+      "order": 25
+    },
+    {
+      "group": "pkg-maintenance",
+      "suggested_name": "pkgtool",
+      "effort": "L",
+      "removes": [
+        "pkgtools2.py",
+        "pkgtools.py",
+        "pyzpkg.py",
+        "pyco.py"
+      ],
+      "flags_to_add": [
+        "-m, --manager",
+        "subcommands",
+        "--dry-run / -y, --yes"
+      ],
+      "confidence": "medium",
+      "order": 26
+    },
+    {
+      "group": "pdf-toolkit",
+      "suggested_name": "pdftools",
+      "effort": "L",
+      "removes": [
+        "pdftools2.py",
+        "pdftoolz.py",
+        "pdftools.py"
+      ],
+      "flags_to_add": [
+        "-b, --backend",
+        "subcommands"
+      ],
+      "confidence": "high",
+      "order": 27
+    },
+    {
+      "group": "package-merge",
+      "suggested_name": "pyrefactor",
+      "effort": "L",
+      "removes": [
+        "prefactor.py",
+        "py_refact.py"
+      ],
+      "flags_to_add": [
+        "--layout",
+        "--modernize",
+        "--all-list / --no-all",
+        "--backup / --restore"
+      ],
+      "confidence": "high",
+      "order": 28
+    }
+  ],
+  "measured_duplicates": [
+    {
+      "left": "pbat.py",
+      "right": "pybat.py",
+      "shingles": 0.7822,
+      "tokens": 0.9831,
+      "definitions": 0.9259,
+      "imports": 1.0,
+      "flags": 1.0,
+      "score": 0.9156
+    },
+    {
+      "left": "pydup.py",
+      "right": "python_duplicate_finder.py",
+      "shingles": 0.7006,
+      "tokens": 0.8706,
+      "definitions": 0.8219,
+      "imports": 0.8718,
+      "flags": 0.8971,
+      "score": 0.8127
+    },
+    {
+      "left": "pdftools2.py",
+      "right": "pdftoolz.py",
+      "shingles": 0.4802,
+      "tokens": 0.7635,
+      "definitions": 0.6667,
+      "imports": 0.6111,
+      "flags": 0.9512,
+      "score": 0.6551
+    },
+    {
+      "left": "pngq.py",
+      "right": "pysvg.py",
+      "shingles": 0.4243,
+      "tokens": 0.746,
+      "definitions": 0.4,
+      "imports": 1.0,
+      "flags": 0.375,
+      "score": 0.5813
+    },
+    {
+      "left": "pyget.py",
+      "right": "python_downloader.py",
+      "shingles": 0.1849,
+      "tokens": 0.59,
+      "definitions": 0.4603,
+      "imports": 0.7895,
+      "flags": 0.8889,
+      "score": 0.5023
+    },
+    {
+      "left": "pdfv2.py",
+      "right": "pdfviewer.py",
+      "shingles": 0.3405,
+      "tokens": 0.5811,
+      "definitions": 0.5862,
+      "imports": 0.5333,
+      "flags": 0.3333,
+      "score": 0.478
+    }
+  ]
+}
