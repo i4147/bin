@@ -15,7 +15,8 @@ Everything here is standalone: `python3` for the Python tools, bash for the rest
 | `inspect.sh` | quick look at a script (head/tail, defs, flags, imports, grep) |
 | `compare_cli.sh` | diff `--help` / bare-run behaviour between two directories |
 | `fetch_sources.sh` | fetch pristine `p*.py` from `i4147/bin_oct` into `orig/` + `out/` |
-| `test_stripper.py` | 15 tests for `../stripper.py` (runs without tree-sitter) |
+| `test_stripper.py` | 18 tests for `../stripper.py` (runs without tree-sitter) |
+| `test_pysource.py` | 60 tests for `../pystrip.py` + `../pysource/` (skips missing extras) |
 
 ## The similarity report
 
@@ -126,8 +127,11 @@ python3 arena/annotation_stats.py --json    # coverage as JSON
 ```
 
 `check_all.sh` skips `pysearch.py` and `py7zmax.py`, the two files excluded from
-the rewrite. Current state: 0 comment lines, 0 docstrings, 2,905/2,905 parameters
-annotated (87.3% concrete), 1,956/1,956 returns annotated, everything class-based.
+the rewrite, and it now compiles every file one by one instead of trusting
+`compileall`, which reported success while two PEP 695 files in
+`pysource/orig/upstream/` failed. Current state: 0 comment lines, 0 docstrings,
+2,768/2,768 parameters annotated (87.2% concrete), 1,862/1,862 returns annotated,
+everything class-based.
 
 ## Language comment strippers
 
@@ -167,10 +171,44 @@ python3 arena/script_similarity.py --root cleaners --pattern 'clean*.py' --top 8
 # clean-css.py / clean-js.py    0.643
 ```
 
-Layout after the move: language strippers in `cleaners/` (16 files, each mapped to
-its `stripper.py` flag in `cleaners/README.md`), python strippers at the root
-(`cleanpy.py`, `clean_type_annotations.py`), `stripper.py` as the single entry
-point. Tests: `python3 arena/test_stripper.py` (15/15).
+Layout: language strippers in `cleaners/` (16 files, each mapped to its
+`stripper.py` flag in `cleaners/README.md`), with `stripper.py` as the single entry
+point for non-Python sources. Tests: `python3 arena/test_stripper.py` (18/18).
+
+## Python comment + annotation tool
+
+`../pystrip.py` and the `../pysource/` package replace the whole Python side:
+the `*rmc*.py` family, `stripy.py`, `py_clean.py`, `pyclean.py`, `cleants.py`,
+`cleanpy.py`, and the annotation trio `annotate.py` / `annotate_types.py` /
+`clean_type_annotations.py`. The scripts themselves are archived verbatim in
+`../pysource/orig/` with a per-script mapping table.
+
+```console
+./pystrip.py strip -a .                                  # inline comments only
+./pystrip.py strip -a . --docstrings --annotations -b libcst -j 8
+./pystrip.py strip -a . -n -d --json                     # preview + machine report
+./pystrip.py annotate -a . -g                            # stubgen, then apply hints
+./pystrip.py list                                        # backends + parallel modes
+```
+
+- **Backends as classes**: `AstBackend` (`ast`), `LibcstBackend` (`libcst`, the
+  only one that can add hints) and `TreeSitterBackend` (`ts`) all live in
+  `pysource/backends.py` behind one `Backend` protocol and a `register()` /
+  `resolve()` registry. On the 27-file `bin_oct` reference corpus the three
+  produce byte-identical output.
+- **Parallelism as a class**: `pysource/parallel.py` exposes `ParallelRunner`
+  with `MultiprocessingRunner` (`starmap`, `map`, `imap_unordered`,
+  `apply_async`), `FuturesRunner` (`cf_map`, `cf_submit`), `JoblibRunner` and
+  `SerialRunner`, all reachable through `make_runner(mode, workers)`.
+- **Per-file pipeline**: `pysource/engine.py` handles discovery, encoding/BOM,
+  CRLF, atomic writes, `.bak` backups, diffs and an `ast.parse` safety gate that
+  refuses to write a file it cannot re-parse.
+- **Grouped separately**: annotation *removal* is `strip --annotations`;
+  annotation *addition* is `annotate` (`libcst` + `ApplyTypeAnnotationsVisitor`
+  + a typeshed sanitiser, optionally fed by `mypy.stubgen`).
+
+Tests: `python3 arena/test_pysource.py` (60 tests; the `libcst`, tree-sitter and
+`joblib` cases skip themselves when those packages are absent).
 
 ## Notes
 

@@ -18,11 +18,22 @@ fail=0
 
 echo "== compiling =="
 if "$PYTHON" - "$DIR" "${EXCLUDED[@]}" <<'PY'
-import compileall, re, sys
-skip = "|".join(re.escape(name) for name in sys.argv[2:])
-pattern = re.compile(rf"^(?!({skip})$).*\.py$") if skip else re.compile(r".*\.py$")
-ok = compileall.compile_dir(sys.argv[1], quiet=2, force=True, rx=pattern)
-raise SystemExit(0 if ok else 1)
+import sys
+from pathlib import Path
+root = Path(sys.argv[1])
+skip = set(sys.argv[2:])
+archive = {"orig", ".venv", "__pycache__", ".git", "node_modules"}
+bad = []
+for path in sorted(root.rglob("*.py")):
+    if path.name in skip or set(path.relative_to(root).parts) & archive:
+        continue
+    try:
+        compile(path.read_bytes(), str(path), "exec")
+    except SyntaxError as error:
+        bad.append(f"{path}:{error.lineno}: {error.msg}")
+for item in bad[:20]:
+    print("  " + item)
+raise SystemExit(0 if not bad else 1)
 PY
 then
     echo "  ok: all scripts compile"

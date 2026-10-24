@@ -222,9 +222,12 @@ class LayoutTest(unittest.TestCase):
         self.assertIn("clean-rs.py", language_scripts)
         self.assertIn("cleants2.py", language_scripts)
 
-    def test_python_strippers_stay_at_root(self) -> None:
-        self.assertTrue((REPO_ROOT / "cleanpy.py").is_file())
-        self.assertTrue((REPO_ROOT / "clean_type_annotations.py").is_file())
+    def test_python_tool_replaces_the_old_root_scripts(self) -> None:
+        self.assertTrue((REPO_ROOT / "pystrip.py").is_file())
+        self.assertTrue((REPO_ROOT / "pysource" / "backends.py").is_file())
+        for name in ("cleanpy.py", "clean_type_annotations.py", "py_clean.py", "pyclean.py"):
+            self.assertFalse((REPO_ROOT / name).exists(), name)
+            self.assertTrue((REPO_ROOT / "pysource" / "orig" / "repo" / name).is_file(), name)
 
     def test_no_python_flag(self) -> None:
         self.assertNotIn("py", stripper.LANGUAGES)
