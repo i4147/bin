@@ -1,0 +1,8 @@
+[package]
+name = "rust_pdf2text"
+version = "0.1.0"
+edition = "2021"
+description = "Extract text from a PDF file (argv[1]) and write it beside the input as .txt"
+
+[dependencies]
+pdf-extract = "0.12"

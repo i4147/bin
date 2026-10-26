@@ -1,0 +1,49 @@
+name: rust_pdf2text
+
+on:
+  push:
+    paths:
+      - "rust_pdf2text/**"
+      - ".github/workflows/rust_pdf2text.yml"
+  pull_request:
+    paths:
+      - "rust_pdf2text/**"
+      - ".github/workflows/rust_pdf2text.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: rust_pdf2text
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install stable Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Run tests
+        run: cargo test
+
+      - name: Build release binary
+        run: cargo build --release
+
+      - name: Smoke test on sample PDF
+        working-directory: ${{ github.workspace }}
+        run: |
+          cp rust_pdf2text/tests/fixtures/sample.pdf /tmp/sample.pdf
+          rust_pdf2text/target/release/rust_pdf2text /tmp/sample.pdf
+          cat /tmp/sample.txt
+          grep -q "rust_pdf2text" /tmp/sample.txt
+
+      - name: Upload generated Cargo.lock
+        uses: actions/upload-artifact@v4
+        with:
+          name: Cargo.lock
+          path: rust_pdf2text/Cargo.lock
